@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taz | CloudShift Labs</title>
+  <style>
+    :root { --navy:#1B2440; --card:#2A3558; --gold:#F5B700; --text:#E8ECF5; --muted:#A9B2C8; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Segoe UI, system-ui, sans-serif; background:var(--navy); color:var(--text); line-height:1.6; }
+    header { padding:80px 24px 48px; text-align:center; }
+    header h1 { font-size:2.6rem; }
+    header p { color:var(--muted); max-width:620px; margin:12px auto 0; }
+    .tag { display:inline-block; color:var(--gold); font-weight:600; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; margin-bottom:8px; }
+    main { max-width:1100px; margin:0 auto; padding:0 24px 80px; }
+    h2 { margin:24px 0 20px; }
+    #projects { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; }
+    .card { background:var(--card); border-radius:14px; padding:22px; display:flex; flex-direction:column; gap:10px; transition:transform .15s; }
+    .card:hover { transform:translateY(-4px); }
+    .card a { color:var(--gold); text-decoration:none; font-size:1.15rem; font-weight:600; }
+    .card p { color:var(--muted); flex:1; }
+    .chips span { display:inline-block; background:rgba(245,183,0,.12); color:var(--gold); border-radius:99px; padding:2px 10px; font-size:.78rem; margin:0 6px 6px 0; }
+    .meta { font-size:.8rem; color:var(--muted); }
+    footer { text-align:center; color:var(--muted); padding:32px; font-size:.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="tag">CloudShift Labs</div>
+    <h1>Hi, I'm Taz</h1>
+    <p>IT security professional building cloud, security and automation projects across Microsoft 365, Azure, and DevOps.</p>
+  </header>
+
+  <main>
+    <h2>Projects</h2>
+    <div id="projects"><p class="meta">Loading projects…</p></div>
+  </main>
+
+  <footer>© <span id="yr"></span> CloudShift Labs</footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    fetch('data/projects.json')
+      .then(r => r.json())
+      .then(list => {
+        const el = document.getElementById('projects');
+        if (!list.length) { el.innerHTML = '<p class="meta">No projects yet. Tag a repo with "portfolio".</p>'; return; }
+        el.innerHTML = list.map(p => `
+          <article class="card">
+            <a href="${p.homepage || p.url}" target="_blank" rel="noopener">${p.name}</a>
+            <p>${p.description || ''}</p>
+            <div class="chips">${p.topics.filter(t => t !== 'portfolio').map(t => `<span>${t}</span>`).join('')}</div>
+            <div class="meta">Updated ${new Date(p.updated).toLocaleDateString()} · <a href="${p.url}" target="_blank" rel="noopener" style="font-size:.8rem">Code</a></div>
+          </article>`).join('');
+      })
+      .catch(() => document.getElementById('projects').innerHTML = '<p class="meta">Projects coming soon.</p>');
+  </script>
+</body>
+</html>
