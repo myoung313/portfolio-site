@@ -138,6 +138,14 @@
     footer a:hover { color:var(--text); }
     .cform .legal { grid-column:1 / -1; font-size:.8rem; color:var(--muted); margin-top:-4px; }
     footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .visits { display:inline-flex; align-items:center; gap:6px; margin-left:4px; opacity:0; transition:opacity .6s; }
+    .visits.on { opacity:1; }
+    .visits::before { content:"·"; margin-right:4px; }
+    .visits i { width:7px; height:7px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 0 rgba(245,183,0,.6); animation:vpulse 2.4s ease-out infinite; }
+    .visits b { color:var(--text); font-weight:600; font-variant-numeric:tabular-nums; }
+    @keyframes vpulse { 0% { box-shadow:0 0 0 0 rgba(245,183,0,.55); } 70%,100% { box-shadow:0 0 0 7px rgba(245,183,0,0); } }
+    @media (prefers-reduced-motion:reduce) { .visits i { animation:none; } }
+    @media (max-width:560px) { .visits { display:flex; margin:8px 0 0; } .visits::before { content:none; } }
 
     @media (max-width:780px) {
       nav ul { display:none; }
@@ -361,11 +369,12 @@
 
   <footer>
     <div class="wrap">
-      <span>© <span id="yr"></span> CloudShift Labs · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+      <span>© <span id="yr"></span> CloudShift Labs · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a><span class="visits" id="visit-count" hidden><i aria-hidden="true"></i><b></b> visits</span></span>
       <span>Microsoft 365 · Entra ID · Intune · Defender</span>
     </div>
   </footer>
 
+  <script src="assets/visit-counter.js" defer></script>
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
