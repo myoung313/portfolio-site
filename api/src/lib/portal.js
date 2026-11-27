@@ -4,7 +4,8 @@
 // signed-in user to the API in the x-ms-client-principal header (base64 JSON).
 // Access is granted if the user's email is on an app setting allow list
 // (CLIENT_EMAILS for the portal, READINESS_EMAILS for the readiness assessment;
-// comma or semicolon separated) or they hold the matching role from an invite.
+// comma or semicolon separated), a member row created by an invite link from the
+// admin portal (see access-store.js), or the matching Azure invite role.
 
 function parsePrincipal(header) {
   if (!header) return null;
@@ -34,18 +35,24 @@ function hasAccess(principal, role, allowList) {
   return roles.includes(role) || allowList.has(emailOf(principal));
 }
 
-/** Readiness access: "readiness" role or READINESS_EMAILS. */
-function hasReadiness(principal, env = process.env) {
+/** Readiness access: "readiness" role, READINESS_EMAILS, or a stored member with readiness (invite link). */
+function hasReadiness(principal, env = process.env, member = null) {
+  if (!principal) return false;
+  if (member && member.readiness && member.email === emailOf(principal)) return true;
   return hasAccess(principal, 'readiness', parseAllowList(env.READINESS_EMAILS));
 }
 
-/** Portal access. People unlocked for the readiness assessment can enter the portal too. */
-function checkAccess(principal, allowList, env = process.env) {
+/**
+ * Portal access: "client" role, CLIENT_EMAILS, a stored member (invite link), or readiness access.
+ * People unlocked for the readiness assessment can enter the portal too.
+ */
+function checkAccess(principal, allowList, env = process.env, member = null) {
   if (!principal) return { status: 401 };
   const email = emailOf(principal);
-  const readiness = hasReadiness(principal, env);
-  const ok = readiness || hasAccess(principal, 'client', allowList);
+  const mine = member && member.email === email ? member : null;
+  const readiness = hasReadiness(principal, env, mine);
+  const ok = readiness || !!(mine && mine.portal) || hasAccess(principal, 'client', allowList);
   return ok ? { status: 200, email, readiness } : { status: 403, email };
 }
 
-module.exports = { parsePrincipal, parseAllowList, hasAccess, hasReadiness, checkAccess };
+module.exports = { parsePrincipal, parseAllowList, emailOf, hasAccess, hasReadiness, checkAccess };

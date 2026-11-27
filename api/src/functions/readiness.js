@@ -3,14 +3,15 @@ const { TableClient } = require('@azure/data-tables');
 const { Resolver } = require('node:dns').promises;
 const crypto = require('crypto');
 const R = require('../lib/readiness');
-const { hasReadiness } = require('../lib/portal');
+const { hasReadiness, emailOf } = require('../lib/portal');
+const { getMember } = require('../lib/access-store');
 const { normalizeDomain, runCheckup } = require('../lib/emailcheck');
 
 // Cyber insurance readiness.
 //  POST /api/readiness/request      public "Request your assessment" form (no prices; Taz quotes by email)
 //  GET  /api/readiness/assessment   questionnaire + saved answers + last report   (readiness access)
 //  POST /api/readiness/assessment   save answers; { submit: true } scores it      (readiness access)
-// Readiness access = the "readiness" role or an email on READINESS_EMAILS, checked here.
+// Readiness access = the "readiness" role, an email on READINESS_EMAILS, or an invite link from the admin portal.
 const REQUESTS_TABLE = 'ReadinessRequests';
 const ASSESS_TABLE = 'ReadinessAssessments';
 const RATE_TABLE = 'ReadinessRateLimit';
@@ -108,7 +109,7 @@ app.http('readinessAssessment', {
   handler: async (request, context) => {
     const user = principal(request);
     if (!user) return json(401, { ok: false, error: 'Please sign in.' });
-    if (!hasReadiness(user)) return json(403, { ok: false, locked: true, error: 'Your readiness assessment is not unlocked yet.' });
+    if (!hasReadiness(user, process.env, await getMember(emailOf(user), m => context.log(m)))) return json(403, { ok: false, locked: true, error: 'Your readiness assessment is not unlocked yet.' });
 
     let store;
     try { store = await getClients(); } catch (err) {

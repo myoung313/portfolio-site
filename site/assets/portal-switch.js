@@ -123,6 +123,8 @@
     slot.replaceWith(btn);
   });
   }
+  // Pages that add a switch later (like the invite page) call this to render it.
+  window.CSPortalSwitchRender = render;
   // Loaded in <head> so the "lights on" darkness covers the page before it paints.
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
   else render();

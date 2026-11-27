@@ -41,7 +41,18 @@
       ]
     },
     {
-      "route": "/portal/admin/*",
+      "route": "/api/admin/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/portal/admin*",
+      "redirect": "/admin-portal/",
+      "statusCode": 301
+    },
+    {
+      "route": "/admin-portal/*",
       "allowedRoles": [
         "authenticated"
       ],
@@ -51,10 +62,24 @@
       }
     },
     {
-      "route": "/portal/admin",
+      "route": "/admin-portal*",
       "allowedRoles": [
         "authenticated"
       ],
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/portal/join/*",
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/portal/join*",
       "headers": {
         "Cache-Control": "no-store",
         "X-Robots-Tag": "noindex"

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <script src="/assets/portal-switch.js"></script>
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/assets/brand/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png" />
+  <title>Your invite | CloudShift Labs</title>
+  <style>
+    :root { --navy:#141C33; --card:#232E52; --line:#2F3B63; --gold:#F5B700; --text:#E8ECF5; --muted:#A9B2C8; --bad:#F09A93; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--navy); }
+    body { font-family:"Segoe UI", system-ui, -apple-system, sans-serif; color:var(--text); line-height:1.55; min-height:100vh;
+      background:var(--navy) radial-gradient(ellipse 700px 500px at 50% 0%, rgba(245,183,0,.10), transparent 70%) no-repeat; }
+    a { color:var(--gold); text-decoration:none; }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:12px; max-width:900px; margin:0 auto; padding:16px 20px; }
+    .logo { font-weight:700; letter-spacing:.04em; color:var(--text); }
+    .logo span { color:var(--gold); }
+    nav small { color:var(--muted); }
+    main { max-width:540px; margin:0 auto; padding:30px 20px 60px; text-align:center; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:30px 26px; box-shadow:0 20px 50px rgba(0,0,0,.25); }
+    .slot { min-height:84px; display:flex; justify-content:center; margin-bottom:10px; }
+    .slot .cs-switch { transform:scale(1.5); transform-origin:center top; }
+    .slot .cs-switch .lbl { display:none; }
+    .eyebrow { color:var(--gold); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem; margin-top:8px; }
+    h1 { font-size:clamp(1.5rem, 5vw, 1.9rem); line-height:1.2; margin:8px 0 10px; }
+    p { color:var(--muted); }
+    .who { display:inline-block; margin:16px 0 0; background:#1B2542; border-radius:10px; padding:8px 14px; font-size:.92rem; color:var(--text); word-break:break-all; }
+    .btns { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:22px; }
+    .btn { display:inline-flex; align-items:center; gap:10px; font-weight:600; padding:12px 20px; border-radius:10px; background:var(--navy); color:#fff; border:1px solid var(--line); }
+    .btn.gold { background:var(--gold); color:var(--navy); border-color:var(--gold); }
+    .ms { display:grid; grid-template-columns:8px 8px; gap:2px; }
+    .ms i { width:8px; height:8px; display:block; }
+    .steps { display:flex; justify-content:center; flex-wrap:wrap; gap:8px 18px; margin-top:22px; font-size:.82rem; color:var(--muted); }
+    .steps b { display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--gold); color:var(--navy); font-size:.7rem; margin-right:6px; }
+    .steps .done b { background:#2E8B57; color:#fff; }
+    .note { font-size:.84rem; margin-top:14px; }
+    .bad { color:var(--bad); }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">CLOUDSHIFT <span>LABS</span></a>
+    <small>Client portal</small>
+  </nav>
+  <main>
+    <div class="card" id="card">
+      <div class="slot" id="slot"></div>
+      <p class="eyebrow" id="eyebrow">You're invited</p>
+      <h1 id="title">Checking your invite…</h1>
+      <p id="text"></p>
+      <div id="who" class="who" hidden></div>
+      <div class="btns" id="btns"></div>
+      <div class="steps" id="steps" hidden><span id="s1"><b>1</b>Sign in</span><span id="s2"><b>2</b>Switch flips</span><span id="s3"><b>3</b>You're in</span></div>
+    </div>
+    <p class="note" id="note"></p>
+  </main>
+  <footer style="text-align:center;color:var(--muted);font-size:.82rem;padding:0 20px 36px">© 2026 CloudShift Labs · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></footer>
+  <noscript><p style="text-align:center;padding:20px">Please turn on JavaScript to accept your invite.</p></noscript>
+
+  <script>
+  (async () => {
+    const $ = id => document.getElementById(id);
+    const code = new URLSearchParams(location.search).get('code') || '';
+    const here = location.pathname + '?code=' + encodeURIComponent(code);
+    const MS = '<span class="ms" aria-hidden="true"><i style="background:#F25022"></i><i style="background:#7FBA00"></i><i style="background:#00A4EF"></i><i style="background:#FFB900"></i></span>';
+    const set = (title, text, eyebrow) => { $('title').textContent = title; $('text').textContent = text || ''; if (eyebrow != null) $('eyebrow').textContent = eyebrow; };
+    const btn = (href, html, cls = '') => `<a class="btn ${cls}" href="${href}">${html}</a>`;
+    const ask = '/#contact';
+
+    function sw(on) {
+      $('slot').innerHTML = '<span data-portal-switch data-href="/portal/" data-label="Client portal"' + (on ? ' data-on' : '') + '></span>';
+      // portal-switch.js renders on load; render this late one by hand.
+      if (window.CSPortalSwitchRender) window.CSPortalSwitchRender();
+    }
+    function fail(title, text) {
+      $('eyebrow').classList.add('bad');
+      set(title, text, 'Invite problem');
+      $('btns').innerHTML = btn(ask, 'Contact Taz', 'gold') + btn('/', 'Back to the site');
+    }
+
+    // 1. Is the link real? (No sign-in needed to check.)
+    let info = null;
+    try {
+      const r = await fetch('/api/portal/join?code=' + encodeURIComponent(code), { cache: 'no-store' });
+      info = await r.json().catch(() => null);
+    } catch (_) {}
+    if (!info || !info.ok) return fail("This invite link isn't valid", (info && info.error) || 'Check that you copied the whole link, or ask Taz for a new one.');
+
+    // 2. Who is signed in?
+    let me = null;
+    try { me = (await (await fetch('/.auth/me', { cache: 'no-store' })).json()).clientPrincipal; } catch (_) {}
+
+    const what = info.portal && info.readiness ? 'your client portal and cyber insurance readiness assessment'
+      : info.readiness ? 'your cyber insurance readiness assessment' : 'your client portal';
+
+    if (!me) {
+      if (info.state !== 'pending') return fail(info.state === 'expired' ? 'This invite link has expired' : 'This invite link has already been used',
+        info.state === 'used' ? 'If it was yours, just sign in at the client portal.' : 'Ask Taz for a new one.');
+      sw(false);
+      set('Your client portal is ready', `Taz at CloudShift Labs set up ${what}. Sign in with Microsoft to flip the lights on.`);
+      $('who').innerHTML = 'Invite for <b></b>'; $('who').querySelector('b').textContent = info.email; $('who').hidden = false;
+      $('btns').innerHTML = btn('/.auth/login/aad?post_login_redirect_uri=' + encodeURIComponent(here), MS + 'Sign in with Microsoft');
+      $('steps').hidden = false;
+      $('note').textContent = 'Use the Microsoft account for the email shown above. Signed in with a different one? You will be asked to switch, and the link stays unused.';
+      return;
+    }
+
+    // 3. Signed in: redeem it.
+    set('Opening your portal…', '');
+    let res, out = {};
+    try {
+      res = await fetch('/api/portal/join', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+      out = await res.json().catch(() => ({}));
+    } catch (_) { res = { ok: false }; }
+
+    if (!res.ok || !out.ok) {
+      if (out.reason === 'wrong_account') {
+        $('eyebrow').classList.add('bad');
+        set('This invite is for a different account', out.error, 'Wrong account');
+        $('who').textContent = 'Signed in as ' + me.userDetails; $('who').hidden = false;
+        $('btns').innerHTML = btn('/.auth/logout?post_logout_redirect_uri=' + encodeURIComponent(here), 'Switch account', 'gold');
+        return;
+      }
+      return fail('That invite didn’t work', out.error || 'Something went wrong. Please try again in a minute.');
+    }
+
+    // 4. In! Flip the switch and head into the portal.
+    sw(false);
+    set(out.already ? 'Welcome back' : "You're in", 'Turning the lights on…', 'Invite accepted');
+    $('steps').hidden = false; ['s1', 's2'].forEach(id => $(id).classList.add('done'));
+    $('btns').innerHTML = btn('/portal/', 'Open the portal', 'gold');
+    setTimeout(() => { const b = $('slot').querySelector('.cs-switch'); if (b) b.click(); else location.href = '/portal/'; }, 900);
+  })();
+  </script>
+</body>
+</html>
