@@ -29,6 +29,32 @@
       "statusCode": 404
     },
     {
+      "route": "/api/comments/admin",
+      "allowedRoles": [
+        "admin"
+      ]
+    },
+    {
+      "route": "/portal/admin/*",
+      "allowedRoles": [
+        "admin"
+      ],
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/portal/admin",
+      "allowedRoles": [
+        "admin"
+      ],
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
       "route": "/portal/*",
       "allowedRoles": [
         "client"

@@ -44,7 +44,8 @@
         <tbody>
           <tr><td><strong>Contact form</strong></td><td>Your name, email, company (optional) and message; the date and time; your browser type; and a scrambled, one-way code made from your IP address</td><td>To reply to you, and to limit how many messages can be sent so the form isn't abused</td></tr>
           <tr><td><strong>Free email checkup</strong></td><td>The domain name you enter, its grade and score, and the date and time; a scrambled code made from your IP address for rate limiting</td><td>To run the check, to see how the tool is used, and to prevent abuse. The check only reads public DNS records.</td></tr>
-          <tr><td><strong>Rate this site</strong></td><td>Your star rating, any suggestion you type, the page you were on, your browser type and a scrambled code made from your IP address</td><td>To improve the site and to limit repeat votes. Suggestions are private unless I tell you otherwise.</td></tr>
+          <tr><td><strong>Rate this site</strong></td><td>Your star rating, any suggestion you type, the page you were on, your browser type and a scrambled code made from your IP address</td><td>To improve the site and to limit repeat votes. Suggestions sent here stay private and are never shown on the public comments page.</td></tr>
+          <tr><td><strong>Comments &amp; suggestions</strong> (<a href="/comments/">/comments/</a>)</td><td>Your post, star rating and display name (all optional except the post), the date and time, your browser type, a scrambled code made from your IP address, and automatic spam and tone scores</td><td>To show your post <strong>publicly</strong> on the site, to screen out spam and abuse, and to limit how many posts can be sent. Your post and display name can be seen by anyone.</td></tr>
           <tr><td><strong>Client portal</strong></td><td>When you sign in with Microsoft: your email address, name, a user ID and the role I've given you</td><td>To confirm who you are and that you're allowed into the portal</td></tr>
           <tr><td><strong>Visit counter</strong> (home page footer)</td><td>A single running total of visits. Nothing about you is saved with it. To stop one person inflating the number, a scrambled code made from your IP address is kept for the day.</td><td>To show a simple visit count. It is not analytics and doesn't track you between pages or sites.</td></tr>
           <tr><td><strong>Phish or Legit?</strong></td><td>Your best score, saved only in your own browser</td><td>To show your best score next time. It is never sent to me.</td></tr>
@@ -67,7 +68,7 @@
     <h2 id="share">3. Who it's shared with</h2>
     <p>I don't sell, rent or trade your personal information. It is shared only with:</p>
     <ul>
-      <li><strong>Microsoft</strong>, which hosts the site and its data (Azure Static Web Apps, Azure Functions and Azure Table Storage) and provides sign-in (Microsoft Entra ID). Microsoft processes data under its own <a href="https://privacy.microsoft.com/privacystatement" rel="noopener">privacy statement</a>.</li>
+      <li><strong>Microsoft</strong>, which hosts the site and its data (Azure Static Web Apps, Azure Functions and Azure Table Storage) and provides sign-in (Microsoft Entra ID). New comments are also checked by Microsoft's Azure AI Content Safety and Azure AI Language services to spot spam, abuse and tone. Microsoft processes data under its own <a href="https://privacy.microsoft.com/privacystatement" rel="noopener">privacy statement</a>.</li>
       <li><strong>Authorities or others</strong> when the law requires it, or when needed to protect rights, property or safety.</li>
       <li><strong>A successor</strong>, if CloudShift Labs is ever merged or sold, under terms at least as protective as these.</li>
     </ul>
@@ -76,12 +77,12 @@
     <p>The site doesn't use advertising, analytics or tracking cookies. It uses only what it needs to work:</p>
     <ul>
       <li><strong>Sign-in cookie</strong> (StaticWebAppsAuthCookie): set only when you sign in to the client portal, so the site knows you're signed in. Signing out removes it.</li>
-      <li><strong>Browser storage</strong> on your device: whether you've already rated the site, whether this visit has already been counted (cleared when you close the tab), your best game score, and a setting that plays the light-switch animation. This stays in your browser and isn't sent to me.</li>
+      <li><strong>Browser storage</strong> on your device: whether you've already rated the site, whether this visit has already been counted (cleared when you close the tab), any of your own comments that are still waiting for review (so you can see them), your best game score, and a setting that plays the light-switch animation. This stays in your browser and isn't sent to me.</li>
     </ul>
     <p>You can clear cookies and site data in your browser settings at any time. The portal won't work without the sign-in cookie.</p>
 
     <h2 id="keep">5. How long I keep it</h2>
-    <p>I keep information only as long as it's needed for the reasons above. Contact messages are kept for as long as they're useful for our conversation or any work that follows, and are deleted on request. Ratings, checkup records, the visit count and rate-limit records contain no names or emails. Portal access ends when I remove your role, and you can ask me to remove it at any time.</p>
+    <p>I keep information only as long as it's needed for the reasons above. Contact messages are kept for as long as they're useful for our conversation or any work that follows, and are deleted on request. Ratings, checkup records, the visit count and rate-limit records contain no names or emails. Public comments stay up until you ask me to remove them, or until I remove them myself; posts I reject are deleted from time to time. Portal access ends when I remove your role, and you can ask me to remove it at any time.</p>
 
     <h2 id="security">6. How it's protected</h2>
     <p>Data is sent over encrypted HTTPS connections and stored in Microsoft Azure, which encrypts data at rest. Access to the stored data is limited to me. IP addresses used for spam limits are stored only as one-way scrambled codes, not as the address itself. No system is perfectly secure, so I can't guarantee absolute security, but I'll tell affected people promptly if a breach involving their information occurs, as the law requires.</p>
