@@ -45,6 +45,7 @@
   .csr-count{text-align:right;font-size:.72rem;color:#A9B2C8;margin-top:2px}
   .csr-legal{font-size:.72rem;color:#A9B2C8;margin-top:8px;text-align:center}
   .csr-legal a{color:#A9B2C8;text-decoration:underline}
+  .csr-thanks a{color:#F5B700;text-decoration:none;font-weight:600}
   .csr-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .csr-send{margin-top:10px;width:100%;border:0;border-radius:12px;padding:12px;background:#F5B700;color:#141C33;font:600 .95rem inherit;font-family:inherit;cursor:pointer;transition:transform .15s,opacity .15s}
   .csr-send:disabled{opacity:.45;cursor:not-allowed}
@@ -218,6 +219,7 @@
       <h3>Thank you!</h3>
       <p>${hadComment ? 'Your suggestion is in. I read every one.' : 'Your rating is in.'}</p>
       ${s && s.count ? `<p style="margin-top:12px;color:#E8ECF5">★ ${s.average.toFixed(1)} from ${s.count} rating${s.count === 1 ? '' : 's'}</p>${bars(s)}` : ''}
+      <p style="margin-top:12px"><a href="/comments/">See what others are saying →</a></p>
     </div>`;
     requestAnimationFrame(() => requestAnimationFrame(() =>
       body.querySelectorAll('.csr-bar b').forEach(b => { b.style.width = b.dataset.w + '%'; })));

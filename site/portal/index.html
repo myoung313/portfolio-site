@@ -27,6 +27,7 @@
     .logo span { color:var(--gold-d); }
     .navr { display:flex; align-items:center; gap:18px; }
     .signout { color:var(--muted); font-size:.9rem; font-weight:500; }
+    .adminlink { font-size:.9rem; white-space:nowrap; }
     main { max-width:1000px; margin:0 auto; padding:16px 20px 60px; }
     .eyebrow { color:var(--gold-d); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem; }
     h1 { font-size:clamp(1.8rem, 4.5vw, 2.6rem); line-height:1.2; margin:8px 0 8px; color:var(--navy); }
@@ -73,6 +74,7 @@
   <nav>
     <a href="/" class="logo">CLOUDSHIFT <span>LABS</span></a>
     <div class="navr">
+      <a href="/portal/admin/" class="adminlink" id="admin-link" hidden>🛡️ Review comments</a>
       <a href="/logout" class="signout">Sign out</a>
       <span data-portal-switch data-on data-href="/" data-label="Client portal" data-title="Flip to go back to the public site"></span>
     </div>
@@ -155,6 +157,9 @@
       document.getElementById('roles').textContent = roles.length ? roles.join(', ') : 'Signed in';
       const mail = document.getElementById('mail');
       mail.href += '&body=' + encodeURIComponent('\n\n---\nSent from the client portal by ' + (p.userDetails || name));
+      // Admins (ADMIN_EMAILS setting) get a link to the comment review queue.
+      fetch('/api/comments/admin?status=pending', { cache: 'no-store' })
+        .then(r => { if (r.ok) document.getElementById('admin-link').hidden = false; }).catch(() => {});
     } catch (_) {
       document.getElementById('acct').textContent = 'Signed in';
     }
