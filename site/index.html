@@ -124,6 +124,9 @@
     @media (max-width:480px) { .checkup form { flex-direction:column; } }
 
     footer { border-top:1px solid var(--line); padding:28px 0; color:var(--muted); font-size:.85rem; }
+    footer a { color:var(--muted); }
+    footer a:hover { color:var(--text); }
+    .cform .legal { grid-column:1 / -1; font-size:.8rem; color:var(--muted); margin-top:-4px; }
     footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 
     @media (max-width:780px) {
@@ -338,6 +341,7 @@
             <input id="cf-website" name="website" tabindex="-1" autocomplete="off" />
           </div>
           <button class="btn" type="submit">Send message</button>
+          <p class="legal">By sending, you agree that I can use your details to reply to you, as described in the <a href="/privacy/">Privacy Policy</a>.</p>
           <div class="cstatus" id="cf-status" role="status" aria-live="polite"></div>
         </form>
         <p class="alt-email">Prefer email? <a href="mailto:tyoung@cloudshiftlabs.net?subject=Security%20review%20request">tyoung@cloudshiftlabs.net</a></p>
@@ -347,7 +351,7 @@
 
   <footer>
     <div class="wrap">
-      <span>© <span id="yr"></span> CloudShift Labs</span>
+      <span>© <span id="yr"></span> CloudShift Labs · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
       <span>Microsoft 365 · Entra ID · Intune · Defender</span>
     </div>
   </footer>
