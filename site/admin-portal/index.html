@@ -192,7 +192,7 @@
     function showLink(out) {
       const url = location.origin + out.path;
       const subject = 'Your CloudShift Labs client portal';
-      const body = `Hi,\n\nHere's your private link to the CloudShift Labs client portal:\n\n${url}\n\nOpen it and sign in with your Microsoft account (${out.email}). The link works once and expires on ${day(out.expiresAt)}.\n\nTaz\nCloudShift Labs`;
+      const body = `Hi,\n\nHere's your private link to the CloudShift Labs client portal:\n\n${url}\n\nOpen it and sign in with your Microsoft account (${out.email}). The link works once and expires on ${day(out.expiresAt)}.\n\nQuestions? Just reply, or email support@cloudshiftlabs.net.\n\nTaz\nCloudShift Labs`;
       $('out').innerHTML = `<div class="result">
         <div class="ttl">✓ Link ready for ${esc(out.email)}</div>
         <div class="url" id="url">${esc(url)}</div>
