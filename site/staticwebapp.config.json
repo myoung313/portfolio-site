@@ -3,6 +3,6 @@
     "apiRuntime": "node:20"
   },
   "routes": [
-    { "route": "/api/*", "methods": ["GET", "PUT", "DELETE", "PATCH"], "statusCode": 405 }
+    { "route": "/api/*", "methods": ["PUT", "DELETE", "PATCH"], "statusCode": 405 }
   ]
 }
