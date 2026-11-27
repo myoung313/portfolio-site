@@ -1,0 +1,58 @@
+[
+  {
+    "sender": "security@micros0ft-support.com",
+    "subject": "Your account will be suspended in 24 hours",
+    "preview": "Verify your password now to avoid losing access.",
+    "isPhish": true,
+    "tip": "Look-alike domain (zero instead of o) plus urgency."
+  },
+  {
+    "sender": "noreply@github.com",
+    "subject": "[GitHub] A new SSH key was added",
+    "preview": "A new public key was added to your account. If this was you, no action is needed.",
+    "isPhish": false,
+    "tip": "Real GitHub domain; an expected alert after you add a key."
+  },
+  {
+    "sender": "payroll@cloudshiftlabs-hr.net",
+    "subject": "Updated W-2 available – log in to view",
+    "preview": "Click below and sign in with your work credentials.",
+    "isPhish": true,
+    "tip": "An external domain pretending to be HR, asking for credentials."
+  },
+  {
+    "sender": "it-helpdesk@cloudshiftlabs.net",
+    "subject": "Scheduled maintenance this Saturday",
+    "preview": "Email will be unavailable 10 PM–12 AM. No action needed.",
+    "isPhish": false,
+    "tip": "Internal domain; no links and no request for credentials."
+  },
+  {
+    "sender": "docs-share@dropbox-files.co",
+    "subject": "Invoice_8841.pdf.html shared with you",
+    "preview": "Open the attached invoice to review payment details.",
+    "isPhish": true,
+    "tip": "Double file extension and a fake Dropbox domain."
+  },
+  {
+    "sender": "ceo.office@gmail.com",
+    "subject": "Quick favor – are you at your desk?",
+    "preview": "I need you to buy 5 gift cards for a client. Keep this between us.",
+    "isPhish": true,
+    "tip": "Classic CEO fraud: personal Gmail, secrecy, gift cards."
+  },
+  {
+    "sender": "no-reply@teams.mail.microsoft",
+    "subject": "You have 3 unread messages in Teams",
+    "preview": "Your teammates are trying to reach you.",
+    "isPhish": false,
+    "tip": "Real Microsoft notification domain; links go to teams.microsoft.com."
+  },
+  {
+    "sender": "delivery@fedex-tracking-update.info",
+    "subject": "Package on hold – pay $1.99 redelivery fee",
+    "preview": "Your package couldn't be delivered. Pay now to reschedule.",
+    "isPhish": true,
+    "tip": "Odd domain plus a small payment request is a card-harvesting trick."
+  }
+]
