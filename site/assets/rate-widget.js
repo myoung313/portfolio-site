@@ -43,6 +43,8 @@
   .csr-panel textarea{width:100%;box-sizing:border-box;min-height:84px;resize:vertical;background:#141C33;color:#E8ECF5;border:1px solid #2F3B63;border-radius:12px;padding:10px 12px;font:inherit;font-size:.92rem}
   .csr-panel textarea:focus{outline:none;border-color:#F5B700;box-shadow:0 0 0 3px rgba(245,183,0,.18)}
   .csr-count{text-align:right;font-size:.72rem;color:#A9B2C8;margin-top:2px}
+  .csr-legal{font-size:.72rem;color:#A9B2C8;margin-top:8px;text-align:center}
+  .csr-legal a{color:#A9B2C8;text-decoration:underline}
   .csr-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .csr-send{margin-top:10px;width:100%;border:0;border-radius:12px;padding:12px;background:#F5B700;color:#141C33;font:600 .95rem inherit;font-family:inherit;cursor:pointer;transition:transform .15s,opacity .15s}
   .csr-send:disabled{opacity:.45;cursor:not-allowed}
@@ -89,6 +91,7 @@
           <div class="csr-hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off" /></div>
           <button class="csr-send" type="submit" disabled>Send it ✈</button>
           <div class="csr-msg" role="status" aria-live="polite"></div>
+          <p class="csr-legal">Ratings are anonymous. See the <a href="/privacy/">Privacy Policy</a> and <a href="/terms/">Terms</a>.</p>
         </form>
       </div>
     </div>`;
