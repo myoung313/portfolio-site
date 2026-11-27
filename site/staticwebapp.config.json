@@ -13,6 +13,12 @@
       "statusCode": 405
     },
     {
+      "route": "/api/readiness/assessment",
+      "allowedRoles": [
+        "readiness"
+      ]
+    },
+    {
       "route": "/login",
       "redirect": "/.auth/login/aad?post_login_redirect_uri=/portal/"
     },
@@ -31,13 +37,13 @@
     {
       "route": "/api/comments/admin",
       "allowedRoles": [
-        "admin"
+        "authenticated"
       ]
     },
     {
       "route": "/portal/admin/*",
       "allowedRoles": [
-        "admin"
+        "authenticated"
       ],
       "headers": {
         "Cache-Control": "no-store",
@@ -47,7 +53,7 @@
     {
       "route": "/portal/admin",
       "allowedRoles": [
-        "admin"
+        "authenticated"
       ],
       "headers": {
         "Cache-Control": "no-store",

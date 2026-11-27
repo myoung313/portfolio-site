@@ -100,7 +100,7 @@
     <div id="list"></div>
   </main>
   <div class="toast" id="toast"></div>
-  <footer>Admin area · visible only to accounts with the admin role.</footer>
+  <footer>Admin area · only accounts listed in the ADMIN_EMAILS setting can use it.</footer>
 
   <script>
   (() => {
@@ -152,6 +152,11 @@
     async function load() {
       const res = await fetch(`/api/comments/admin?status=${status}`, { cache: 'no-store' });
       const out = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 403) {
+        $('tabs').hidden = true;
+        $('list').innerHTML = `<div class="empty"><div class="big">🔒</div>${esc(out.error || 'Admins only.')}<br>Signed in with the wrong account? <a href="/logout">Sign out</a> and try again.</div>`;
+        return;
+      }
       if (!res.ok || !out.ok) { $('list').innerHTML = `<div class="empty">${esc(out.error || 'Could not load comments.')}</div>`; return; }
       items = out.comments || [];
       for (const [k, v] of Object.entries(out.counts || {})) if ($('n-' + k)) $('n-' + k).textContent = v;

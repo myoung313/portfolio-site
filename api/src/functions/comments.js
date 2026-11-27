@@ -49,7 +49,16 @@ function principal(request) {
   if (!header) return null;
   try { return JSON.parse(Buffer.from(header, 'base64').toString('utf8')); } catch { return null; }
 }
-const isAdmin = request => (principal(request)?.userRoles || []).includes('admin');
+// Admins are listed by email in the ADMIN_EMAILS app setting (comma separated), because
+// invite-based custom roles don't work reliably on the Free plan. An "admin" role still counts.
+function isAdmin(request, env = process.env) {
+  const p = principal(request);
+  if (!p) return false;
+  if ((p.userRoles || []).includes('admin')) return true;
+  const email = String(p.userDetails || '').trim().toLowerCase();
+  const allowed = String(env.ADMIN_EMAILS || '').split(/[,;\s]+/).map(e => e.trim().toLowerCase()).filter(Boolean);
+  return !!email && allowed.includes(email);
+}
 
 const parseJson = s => { try { return s ? JSON.parse(s) : null; } catch { return null; } };
 
@@ -138,13 +147,14 @@ app.http('comments', {
   },
 });
 
-// Admin review queue. staticwebapp.config.json also limits this route to the admin role.
+// Admin review queue. staticwebapp.config.json requires sign-in; ADMIN_EMAILS decides who gets in.
 app.http('commentsAdmin', {
   methods: ['GET', 'POST'],
   authLevel: 'anonymous',
   route: 'comments/admin',
   handler: async (request, context) => {
-    if (!isAdmin(request)) return json(403, { ok: false, error: 'Admins only.' });
+    if (!principal(request)) return json(401, { ok: false, error: 'Please sign in.' });
+    if (!isAdmin(request)) return json(403, { ok: false, notAdmin: true, error: 'This account is not on the admin list.' });
     try {
       const { comments } = await getClients();
 
@@ -199,3 +209,5 @@ app.http('commentsAdmin', {
     }
   },
 });
+
+module.exports = { isAdmin };
