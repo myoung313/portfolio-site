@@ -79,6 +79,21 @@
     .contact .box { background:linear-gradient(135deg, #2A3558, #1B2440); border:1px solid var(--line); border-radius:20px; padding:56px 28px; }
     .contact h2 { font-size:2rem; margin-bottom:12px; }
     .contact p { color:var(--muted); max-width:560px; margin:0 auto 28px; }
+    .cform { max-width:620px; margin:0 auto; text-align:left; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .cform .full { grid-column:1 / -1; }
+    .cform label { display:block; font-size:.85rem; color:var(--muted); margin-bottom:6px; }
+    .cform input, .cform textarea { width:100%; background:var(--navy); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font:inherit; }
+    .cform input:focus, .cform textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(245,183,0,.18); }
+    .cform textarea { min-height:140px; resize:vertical; }
+    .cform .err { color:#FF8A80; font-size:.8rem; min-height:1em; margin-top:4px; }
+    .cform [aria-invalid="true"] { border-color:#FF8A80; }
+    .cform .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+    .cform button { border:0; cursor:pointer; font:inherit; font-weight:600; justify-self:start; }
+    .cform button:disabled { opacity:.6; cursor:wait; transform:none; }
+    .cstatus { grid-column:1 / -1; font-size:.95rem; min-height:1.4em; }
+    .cstatus.ok { color:#7CE0A3; } .cstatus.bad { color:#FF8A80; }
+    .contact .alt-email { font-size:.9rem; margin:22px auto 0; }
+    @media (max-width:600px) { .cform { grid-template-columns:1fr; } }
 
     footer { border-top:1px solid var(--line); padding:28px 0; color:var(--muted); font-size:.85rem; }
     footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
@@ -234,7 +249,35 @@
         <div class="eyebrow">Get in touch</div>
         <h2>Not sure how secure your Microsoft 365 is?</h2>
         <p>Send a quick note about your business and what's worrying you. I'll reply with next steps, no hard sell.</p>
-        <a class="btn" href="mailto:tyoung@cloudshiftlabs.net?subject=Security%20review%20request">Email tyoung@cloudshiftlabs.net</a>
+        <form id="contact-form" class="cform" novalidate>
+          <div>
+            <label for="cf-name">Name</label>
+            <input id="cf-name" name="name" autocomplete="name" maxlength="100" required />
+            <div class="err" id="cf-name-err"></div>
+          </div>
+          <div>
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" autocomplete="email" maxlength="254" required />
+            <div class="err" id="cf-email-err"></div>
+          </div>
+          <div class="full">
+            <label for="cf-company">Company (optional)</label>
+            <input id="cf-company" name="company" autocomplete="organization" maxlength="120" />
+            <div class="err" id="cf-company-err"></div>
+          </div>
+          <div class="full">
+            <label for="cf-message">What can I help with?</label>
+            <textarea id="cf-message" name="message" maxlength="4000" minlength="10" required placeholder="e.g. We're 12 people on Microsoft 365 and not sure MFA is set up right."></textarea>
+            <div class="err" id="cf-message-err"></div>
+          </div>
+          <div class="hp" aria-hidden="true">
+            <label for="cf-website">Leave this empty</label>
+            <input id="cf-website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+          <button class="btn" type="submit">Send message</button>
+          <div class="cstatus" id="cf-status" role="status" aria-live="polite"></div>
+        </form>
+        <p class="alt-email">Prefer email? <a href="mailto:tyoung@cloudshiftlabs.net?subject=Security%20review%20request">tyoung@cloudshiftlabs.net</a></p>
       </div>
     </div>
   </section>
@@ -263,6 +306,55 @@
           </article>`).join('');
       })
       .catch(() => document.getElementById('projects-grid').innerHTML = '<p class="meta">New projects coming soon.</p>');
+
+    // Contact form -> /api/contact (Azure Function, stores in Table Storage)
+    (() => {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+      const startedAt = Date.now();
+      const status = document.getElementById('cf-status');
+      const btn = form.querySelector('button');
+      const fields = ['name', 'email', 'company', 'message'];
+      const setErr = (f, msg) => {
+        document.getElementById(`cf-${f}-err`).textContent = msg || '';
+        form.elements[f].setAttribute('aria-invalid', msg ? 'true' : 'false');
+      };
+      const say = (msg, cls) => { status.textContent = msg; status.className = 'cstatus ' + (cls || ''); };
+
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        fields.forEach(f => setErr(f));
+        const v = Object.fromEntries(fields.map(f => [f, form.elements[f].value.trim()]));
+        let bad = false;
+        if (!v.name) { setErr('name', 'Please enter your name.'); bad = true; }
+        if (!form.elements.email.checkValidity() || !v.email) { setErr('email', 'Please enter a valid email.'); bad = true; }
+        if (v.message.length < 10) { setErr('message', 'Please write at least 10 characters.'); bad = true; }
+        if (bad) { say(''); return; }
+
+        btn.disabled = true; say('Sending…');
+        try {
+          const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...v, website: form.elements.website.value, startedAt }),
+          });
+          const out = await res.json().catch(() => ({}));
+          if (res.ok && out.ok) {
+            form.reset();
+            say("Thanks! Your message is in. I'll get back to you within one business day.", 'ok');
+          } else if (out.errors) {
+            Object.entries(out.errors).forEach(([f, m]) => fields.includes(f) ? setErr(f, m) : say(m, 'bad'));
+            if (!status.textContent) say('Please fix the highlighted fields.', 'bad');
+          } else {
+            say(out.error || 'Something went wrong. Please email tyoung@cloudshiftlabs.net instead.', 'bad');
+          }
+        } catch {
+          say('Could not reach the server. Please email tyoung@cloudshiftlabs.net instead.', 'bad');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
   </script>
 </body>
 </html>

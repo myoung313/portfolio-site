@@ -1,0 +1,14 @@
+{
+  "name": "cloudshift-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Azure Functions API for cloudshiftlabs.net (contact form)",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.2",
+    "@azure/functions": "^4.17.1"
+  }
+}
