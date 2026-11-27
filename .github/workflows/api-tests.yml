@@ -1,0 +1,32 @@
+name: API tests
+
+# Runs on pull requests and feature branches (never deploys anything).
+on:
+  pull_request:
+    paths: ["api/**", ".github/workflows/api-tests.yml"]
+  push:
+    branches-ignore: [main]
+    paths: ["api/**", ".github/workflows/api-tests.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - run: npm ci
+      - name: Unit tests
+        run: npm test
+      - name: Live email checkup against real domains
+        run: node scripts/smoke.js microsoft.com cloudshiftlabs.net google.com github.com example.com
