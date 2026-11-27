@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <script src="/assets/portal-switch.js"></script>
+  <title>Portal access needed | CloudShift Labs</title>
+  <style>
+    :root { --navy:#141C33; --card:#232E52; --line:#2F3B63; --gold:#F5B700; --text:#E8ECF5; --muted:#A9B2C8; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--navy); }
+    body { font-family:"Segoe UI", system-ui, -apple-system, sans-serif; color:var(--text); line-height:1.55; min-height:100vh;
+      background:var(--navy) radial-gradient(ellipse 700px 500px at 50% 0%, rgba(245,183,0,.10), transparent 70%) no-repeat; }
+    a { color:var(--gold); text-decoration:none; }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:12px; max-width:900px; margin:0 auto; padding:16px 20px; }
+    .logo { font-weight:700; letter-spacing:.04em; color:var(--text); }
+    .logo span { color:var(--gold); }
+    main { max-width:620px; margin:0 auto; padding:50px 20px 70px; text-align:center; }
+    .bulb { font-size:3rem; filter:grayscale(1) brightness(.8); }
+    .eyebrow { color:var(--gold); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; margin-top:10px; }
+    h1 { font-size:clamp(1.7rem, 5vw, 2.3rem); line-height:1.2; margin:10px 0 14px; }
+    p { color:var(--muted); }
+    .who { display:inline-block; margin:18px 0 4px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:8px 14px; color:var(--text); font-size:.92rem; word-break:break-all; }
+    .btns { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:28px; }
+    .btn { display:inline-block; font-weight:600; padding:12px 20px; border-radius:10px; background:var(--gold); color:var(--navy); }
+    .btn.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
+    .small { font-size:.85rem; margin-top:28px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">CLOUDSHIFT <span>LABS</span></a>
+    <span data-portal-switch data-href="/" data-label="Public site" data-state="Flip to go back" data-title="Flip to go back to the public site"></span>
+  </nav>
+  <main>
+    <div class="bulb" aria-hidden="true">💡</div>
+    <p class="eyebrow">Client portal</p>
+    <h1>The lights are off in here, for now.</h1>
+    <p>You're signed in, but this account isn't on the client list yet. Portal access is by invitation, so if you're working with CloudShift Labs, ask for an invite and you'll be in shortly.</p>
+    <div class="who" id="who" hidden></div>
+    <div class="btns">
+      <a class="btn" id="ask" href="mailto:tyoung@cloudshiftlabs.net?subject=Client%20portal%20access">Request access</a>
+      <a class="btn ghost" href="/.auth/logout?post_logout_redirect_uri=/portal/">Use a different account</a>
+    </div>
+    <p class="small">Already have an invite link? Open it and sign in with the same email it was sent to. <a href="/logout">Sign out</a></p>
+  </main>
+  <script>
+  (async () => {
+    try {
+      const { clientPrincipal: p } = await (await fetch('/.auth/me', { cache: 'no-store' })).json();
+      if (!p) return;
+      const who = document.getElementById('who');
+      who.textContent = 'Signed in as ' + p.userDetails;
+      who.hidden = false;
+      const ask = document.getElementById('ask');
+      ask.href += '&body=' + encodeURIComponent('Hi Taz, please give portal access to: ' + p.userDetails);
+    } catch (_) {}
+  })();
+  </script>
+</body>
+</html>

@@ -3,6 +3,32 @@
     "apiRuntime": "node:20"
   },
   "routes": [
-    { "route": "/api/*", "methods": ["PUT", "DELETE", "PATCH"], "statusCode": 405 }
-  ]
+    { "route": "/api/*", "methods": ["PUT", "DELETE", "PATCH"], "statusCode": 405 },
+
+    { "route": "/login", "redirect": "/.auth/login/aad?post_login_redirect_uri=/portal/" },
+    { "route": "/logout", "redirect": "/.auth/logout?post_logout_redirect_uri=/" },
+    { "route": "/.auth/login/github", "statusCode": 404 },
+    { "route": "/.auth/login/twitter", "statusCode": 404 },
+
+    {
+      "route": "/portal/*",
+      "allowedRoles": ["client"],
+      "headers": { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" }
+    },
+    {
+      "route": "/portal*",
+      "allowedRoles": ["client"],
+      "headers": { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" }
+    }
+  ],
+  "responseOverrides": {
+    "401": {
+      "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer",
+      "statusCode": 302
+    },
+    "403": {
+      "rewrite": "/access-denied.html",
+      "statusCode": 403
+    }
+  }
 }

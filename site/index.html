@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="/assets/portal-switch.js"></script>
   <title>CloudShift Labs | Microsoft 365 &amp; Cloud Security</title>
   <meta name="description" content="CloudShift Labs helps small businesses secure Microsoft 365, Entra ID, email and devices. Security assessments, Zero Trust, DMARC and Intune by Taz, an MSSP-experienced security engineer." />
   <style>
@@ -28,6 +29,13 @@
     .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,183,0,.25); }
     .btn.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
     nav .btn { padding:8px 16px; font-size:.9rem; }
+    nav .logo, nav ul a, nav .btn, .cs-switch { white-space:nowrap; }
+    nav .navr { display:flex; align-items:center; gap:18px; }
+    nav ul { gap:22px; }
+    nav ul li:nth-child(3), nav ul li:nth-child(4) { display:none; } /* "How I work" and "Projects" make room for the portal switch; both are one scroll away */
+    @media (max-width:1000px) { nav ul li:nth-child(5), nav ul li:nth-child(6) { display:none; } }
+    @media (max-width:520px) { nav .wrap { padding:0 16px; } nav .navr { gap:12px; } .cs-switch .lbl small { display:none; } }
+    @media (max-width:430px) { nav .btn { display:none; } }
 
     /* Hero */
     .hero { padding:110px 0 90px; text-align:center; background:radial-gradient(ellipse at top, #24305a 0%, var(--navy) 65%); }
@@ -138,7 +146,10 @@
         <li><a href="/checkup/">✉ Free email checkup</a></li>
         <li><a href="/phish/">🎣 Play: Phish or Legit?</a></li>
       </ul>
-      <a href="#contact" class="btn">Book a call</a>
+      <div class="navr">
+        <span data-portal-switch data-href="/portal/" data-label="Client portal"></span>
+        <a href="#contact" class="btn">Book a call</a>
+      </div>
     </div>
   </nav>
 
