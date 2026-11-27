@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyber Insurance Readiness Assessment | CloudShift Labs</title>
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/assets/brand/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png" />
+  <meta name="theme-color" content="#141C33" />
+  <meta property="og:site_name" content="CloudShift Labs" />
+  <meta property="og:title" content="Cyber Insurance Readiness Assessment" />
+  <meta property="og:image" content="https://cloudshiftlabs.net/assets/brand/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="description" content="Find out how your small business would answer a cyber insurance application before your insurer asks. MFA, backups, EDR, email security and more, scored with a prioritized fix plan." />
+  <style>
+    :root {
+      --navy:#141C33; --navy2:#1B2440; --card:#232E52; --line:#2F3B63;
+      --gold:#F5B700; --text:#E8ECF5; --muted:#A9B2C8; --pass:#30A46C; --fail:#E5484D;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--navy); scroll-behavior:smooth; }
+    body { font-family:"Segoe UI", system-ui, -apple-system, sans-serif; background:var(--navy) radial-gradient(ellipse 1200px 800px at top, #24305a 0%, var(--navy) 70%) no-repeat; color:var(--text); line-height:1.6; }
+    a { color:var(--gold); text-decoration:none; }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:12px; max-width:1060px; margin:0 auto; padding:18px 20px; }
+    .logo { font-weight:700; letter-spacing:.04em; color:var(--text); display:inline-flex; align-items:center; gap:10px; white-space:nowrap; }
+    .logo img { width:28px; height:28px; }
+    .logo span { color:var(--gold); }
+    nav .links { display:flex; gap:18px; font-size:.92rem; align-items:center; }
+    nav .links a { color:var(--muted); white-space:nowrap; }
+    nav .links a:hover { color:var(--text); }
+    main { max-width:1060px; margin:0 auto; padding:0 20px 60px; }
+    .eyebrow { color:var(--gold); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; }
+    .btn { display:inline-block; border:0; cursor:pointer; font:inherit; font-weight:600; background:var(--gold); color:var(--navy); padding:13px 24px; border-radius:12px; transition:transform .15s, box-shadow .15s; }
+    .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,183,0,.25); }
+    .btn.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
+    .btn:disabled { opacity:.6; cursor:wait; transform:none; }
+
+    /* Hero */
+    .hero { display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:center; padding:40px 0 70px; }
+    .hero h1 { font-size:clamp(2rem, 5vw, 3.1rem); line-height:1.13; margin:12px 0 16px; }
+    .hero h1 em { font-style:normal; color:var(--gold); }
+    .hero p.lead { color:var(--muted); font-size:1.12rem; margin-bottom:28px; max-width:540px; }
+    .hero .cta { display:flex; gap:12px; flex-wrap:wrap; }
+    .stat-row { display:flex; gap:22px; margin-top:28px; flex-wrap:wrap; color:var(--muted); font-size:.88rem; }
+    .stat-row b { display:block; color:var(--text); font-size:1.25rem; }
+
+    /* The underwriter's application that fills itself in */
+    .appform { position:relative; background:#FBF8F1; color:#1E2540; border-radius:14px; padding:22px 22px 26px; box-shadow:0 30px 60px rgba(0,0,0,.35); transform:rotate(1.6deg); max-width:430px; justify-self:center; width:100%; cursor:pointer; }
+    .appform::before { content:""; position:absolute; top:-12px; left:50%; width:110px; height:26px; margin-left:-55px; background:linear-gradient(#cfd6e6, #9aa5bf); border-radius:6px 6px 10px 10px; box-shadow:0 2px 4px rgba(0,0,0,.3); }
+    .appform h3 { font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color:#5E6680; border-bottom:2px solid #1E2540; padding:8px 0 8px; margin-bottom:10px; display:flex; justify-content:space-between; }
+    .appform ol { list-style:none; }
+    .appform li { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dashed #D9D1BD; font-size:.93rem; }
+    .box { flex:none; width:22px; height:22px; border:2px solid #1E2540; border-radius:4px; position:relative; }
+    .box::after { content:""; position:absolute; left:5px; top:0; width:7px; height:13px; border:solid #2E8B57; border-width:0 3px 3px 0; transform:rotate(45deg) scale(0); transform-origin:center; transition:transform .25s cubic-bezier(.2,1.8,.4,1); }
+    .appform li.on .box::after { transform:rotate(45deg) scale(1); }
+    .appform li.on span { color:#1E2540; }
+    .appform li span { color:#8A90A3; transition:color .2s; }
+    .sig { margin-top:16px; font-size:.75rem; color:#8A90A3; display:flex; justify-content:space-between; }
+    .stamp { position:absolute; left:34%; bottom:52px; border:4px solid #2E8B57; color:#2E8B57; font-weight:900; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px; border-radius:8px; font-size:1.25rem; line-height:1.1; text-align:center;
+      transform:rotate(-14deg) scale(3); opacity:0; mix-blend-mode:multiply; background:rgba(46,139,87,.06); }
+    .stamp small { display:block; font-size:.62rem; letter-spacing:.2em; }
+    .appform.stamped .stamp { animation:stamp .45s cubic-bezier(.2,1.6,.4,1) forwards; }
+    .appform.thud { animation:thud .35s ease; }
+    @keyframes stamp { to { opacity:.92; transform:rotate(-14deg) scale(1); } }
+    @keyframes thud { 0%,100% { transform:rotate(1.6deg); } 40% { transform:rotate(1.6deg) translateY(4px) scale(.985); } }
+    .replay { display:block; text-align:center; color:var(--muted); font-size:.8rem; margin-top:12px; }
+
+    section { padding:60px 0; }
+    .head { text-align:center; margin-bottom:38px; }
+    .head h2 { font-size:clamp(1.6rem, 4vw, 2.1rem); margin-top:8px; }
+    .head p { color:var(--muted); max-width:640px; margin:10px auto 0; }
+
+    /* Areas */
+    .areas { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
+    .area { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; transition:transform .2s, border-color .2s; }
+    .area:hover { transform:translateY(-3px); border-color:var(--gold); }
+    .area .ic { font-size:1.4rem; }
+    .area h3 { font-size:1rem; margin:6px 0 4px; }
+    .area p { color:var(--muted); font-size:.88rem; }
+    .area .must { display:inline-block; margin-top:8px; font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#FF9F9F; background:rgba(229,72,77,.15); padding:2px 8px; border-radius:99px; }
+
+    /* Steps */
+    .flow { display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; counter-reset:f; }
+    .flow div { position:relative; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 18px 18px; }
+    .flow div::before { counter-increment:f; content:counter(f); position:absolute; top:-14px; left:18px; width:28px; height:28px; border-radius:50%; background:var(--gold); color:var(--navy); font-weight:800; display:grid; place-items:center; font-size:.9rem; }
+    .flow h3 { font-size:1rem; margin-bottom:4px; }
+    .flow p { color:var(--muted); font-size:.9rem; }
+
+    /* Packages, no prices: Taz quotes each one */
+    .pkgs { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; align-items:stretch; }
+    .pkg { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:26px; display:flex; flex-direction:column; position:relative; }
+    .pkg.pop { border-color:var(--gold); box-shadow:0 0 0 1px var(--gold), 0 18px 40px rgba(245,183,0,.08); }
+    .pkg .badge { position:absolute; top:-12px; right:20px; background:var(--gold); color:var(--navy); font-size:.72rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:99px; }
+    .pkg h3 { font-size:1.2rem; }
+    .pkg .for { color:var(--muted); font-size:.9rem; margin:4px 0 14px; }
+    .pkg ul { list-style:none; margin-bottom:20px; flex:1; }
+    .pkg li { padding:5px 0 5px 24px; position:relative; font-size:.93rem; }
+    .pkg li::before { content:"✓"; position:absolute; left:0; color:var(--gold); font-weight:700; }
+    .pkg li.plus { color:var(--muted); }
+    .pkg li.plus::before { content:"+"; }
+    .pkg .btn { text-align:center; }
+    .quote-note { text-align:center; color:var(--muted); font-size:.9rem; margin-top:18px; }
+
+    /* Request form */
+    .reqbox { background:linear-gradient(135deg, #2A3558, #1B2440); border:1px solid var(--line); border-radius:22px; padding:44px 28px; }
+    .rform { max-width:640px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .rform .full { grid-column:1 / -1; }
+    .rform label { display:block; font-size:.85rem; color:var(--muted); margin-bottom:6px; }
+    .rform input, .rform select, .rform textarea { width:100%; background:var(--navy); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font:inherit; }
+    .rform input:focus, .rform select:focus, .rform textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(245,183,0,.18); }
+    .rform textarea { min-height:100px; resize:vertical; }
+    .rform [aria-invalid="true"] { border-color:#FF8A80; }
+    .rform .err { color:#FF8A80; font-size:.8rem; min-height:1em; margin-top:4px; }
+    .rform .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+    .pkpick { display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; }
+    .pkpick label { margin:0; display:flex; gap:8px; align-items:center; background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:10px 12px; color:var(--text); cursor:pointer; font-size:.92rem; }
+    .pkpick input { width:auto; accent-color:var(--gold); }
+    .pkpick label:has(input:checked) { border-color:var(--gold); background:rgba(245,183,0,.08); }
+    .legal { font-size:.8rem; color:var(--muted); }
+    .rstatus { font-size:.95rem; min-height:1.4em; }
+    .rstatus.bad { color:#FF8A80; }
+    .sent { display:none; text-align:center; padding:20px 0; }
+    .sent.show { display:block; animation:pop .5s cubic-bezier(.2,1.4,.4,1); }
+    .sent .plane { font-size:3rem; display:inline-block; animation:fly 1.6s ease-in-out; }
+    @keyframes pop { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:none; } }
+    @keyframes fly { 0% { transform:translate(-80px, 40px) rotate(-10deg); opacity:0; } 60% { transform:translate(10px, -6px) rotate(6deg); opacity:1; } 100% { transform:none; } }
+    .sent h3 { font-size:1.5rem; margin:8px 0; }
+    .sent p { color:var(--muted); max-width:480px; margin:0 auto; }
+
+    /* FAQ */
+    .faq { max-width:760px; margin:0 auto; }
+    details { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:10px; }
+    summary { cursor:pointer; font-weight:600; list-style:none; display:flex; justify-content:space-between; gap:10px; }
+    summary::after { content:"+"; color:var(--gold); font-size:1.2rem; line-height:1; transition:transform .2s; }
+    details[open] summary::after { transform:rotate(45deg); }
+    details p { color:var(--muted); margin-top:8px; font-size:.95rem; }
+    footer { text-align:center; color:var(--muted); font-size:.82rem; padding:10px 20px 40px; }
+
+    @media (max-width:900px) {
+      .hero { grid-template-columns:1fr; gap:34px; padding-top:20px; }
+      .pkgs { grid-template-columns:1fr; }
+      .flow { grid-template-columns:1fr 1fr; row-gap:26px; }
+    }
+    @media (max-width:560px) {
+      .rform, .pkpick { grid-template-columns:1fr; }
+      .flow { grid-template-columns:1fr; }
+      nav .links .hide-sm { display:none; }
+      .reqbox { padding:30px 16px; }
+      section { padding:44px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo"><img src="/assets/brand/logo-icon.svg" alt="" width="28" height="28" />CLOUDSHIFT <span>LABS</span></a>
+    <div class="links">
+      <a href="/#services" class="hide-sm">Services</a>
+      <a href="/checkup/" class="hide-sm">✉ Email checkup</a>
+      <a href="#request">Request</a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Cyber insurance readiness</div>
+        <h1>Know your answers <em>before</em> your insurer asks.</h1>
+        <p class="lead">Cyber insurance applications ask hard questions about MFA, backups, EDR and email security. One wrong answer can mean a higher premium, an exclusion, or a flat decline. Find out where you stand, and get a step-by-step plan to fix the gaps.</p>
+        <div class="cta">
+          <a href="#request" class="btn">Request your assessment</a>
+          <a href="#how" class="btn ghost">How it works</a>
+        </div>
+        <div class="stat-row">
+          <div><b>~15 min</b>to answer</div>
+          <div><b>9 areas</b>insurers ask about</div>
+          <div><b>Scored report</b>with a fix plan</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="appform" id="appform" role="img" aria-label="An insurance application checklist filling in, then stamped Ready to renew">
+          <h3><span>Cyber application</span><span>Pg 2 of 4</span></h3>
+          <ol id="applist">
+            <li><span>MFA on email and remote access</span><i class="box"></i></li>
+            <li><span>Offline or immutable backups</span><i class="box"></i></li>
+            <li><span>EDR on every device</span><i class="box"></i></li>
+            <li><span>Advanced email filtering</span><i class="box"></i></li>
+            <li><span>Critical patches within 30 days</span><i class="box"></i></li>
+            <li><span>Separate admin accounts</span><i class="box"></i></li>
+            <li><span>Incident response plan</span><i class="box"></i></li>
+          </ol>
+          <div class="sig"><span>Applicant: ______________</span><span>Date: ____</span></div>
+          <div class="stamp" aria-hidden="true"><small>CloudShift Labs</small>Ready to<br>renew</div>
+        </div>
+        <span class="replay">Tap the form to play it again</span>
+      </div>
+    </header>
+
+    <section id="areas">
+      <div class="head">
+        <div class="eyebrow">What we check</div>
+        <h2>The 9 areas underwriters ask about</h2>
+        <p>Modeled on the questions in common small-business cyber insurance applications, and written in plain English. Not sure of an answer? Pick "I'm not sure" and it goes on your to-find-out list.</p>
+      </div>
+      <div class="areas">
+        <div class="area"><div class="ic">🔐</div><h3>Multi-factor authentication</h3><p>Email, remote access and admin accounts.</p><span class="must">Must-have</span></div>
+        <div class="area"><div class="ic">💾</div><h3>Backups and recovery</h3><p>Offline or immutable copies, M365 backup, tested restores.</p><span class="must">Must-have</span></div>
+        <div class="area"><div class="ic">💻</div><h3>Endpoint protection</h3><p>EDR on every device, 24/7 monitoring, encryption.</p><span class="must">Must-have</span></div>
+        <div class="area"><div class="ic">✉️</div><h3>Email security</h3><p>Filtering, macros, plus an automatic SPF, DKIM and DMARC check.</p></div>
+        <div class="area"><div class="ic">🩹</div><h3>Patching and old systems</h3><p>How fast you patch, and anything past end of support.</p></div>
+        <div class="area"><div class="ic">🗝️</div><h3>Admin access</h3><p>Separate admin accounts and fewer global admins.</p></div>
+        <div class="area"><div class="ic">🚨</div><h3>Incident response</h3><p>A written plan, and logs kept long enough to investigate.</p></div>
+        <div class="area"><div class="ic">🎓</div><h3>People and payments</h3><p>Training, phishing tests and payment call-backs.</p></div>
+        <div class="area"><div class="ic">🤝</div><h3>Vendors</h3><p>IT providers and software with access to your systems.</p></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="head">
+        <div class="eyebrow">How it works</div>
+        <h2>From request to report in four steps</h2>
+      </div>
+      <div class="flow">
+        <div><h3>Request</h3><p>Tell me a little about your business below. No payment yet.</p></div>
+        <div><h3>Get a quote</h3><p>I reply within one business day with a quote and a secure payment link.</p></div>
+        <div><h3>Answer the questions</h3><p>You get a private login to the client portal. Answer at your own pace; it saves as you go.</p></div>
+        <div><h3>Get your report</h3><p>A readiness score, the must-haves you're missing, and a fix plan you can print or save as a PDF.</p></div>
+      </div>
+    </section>
+
+    <section id="packages">
+      <div class="head">
+        <div class="eyebrow">Options</div>
+        <h2>Pick the level of help you want</h2>
+        <p>Every option includes the full questionnaire and scored report. Pricing depends on your size and timeline, so I quote each one personally.</p>
+      </div>
+      <div class="pkgs">
+        <div class="pkg">
+          <h3>Readiness score</h3>
+          <p class="for">For a quick, honest picture.</p>
+          <ul>
+            <li>Online questionnaire in your private portal</li>
+            <li>Readiness score and level</li>
+            <li>Must-have gaps flagged</li>
+            <li>Prioritized fix plan</li>
+            <li>Automatic email security check</li>
+          </ul>
+          <a href="#request" class="btn ghost" data-pick="score">Request this</a>
+        </div>
+        <div class="pkg pop">
+          <span class="badge">Most popular</span>
+          <h3>Score + review call</h3>
+          <p class="for">For when you want someone to talk it through.</p>
+          <ul>
+            <li>Everything in Readiness score</li>
+            <li class="plus">30-minute video call to go through your report</li>
+            <li class="plus">Help wording your insurer's questions</li>
+            <li class="plus">Your top three fixes, explained step by step</li>
+          </ul>
+          <a href="#request" class="btn" data-pick="review">Request this</a>
+        </div>
+        <div class="pkg">
+          <h3>Renewal sprint</h3>
+          <p class="for">For a renewal or application coming up soon.</p>
+          <ul>
+            <li>Everything in Score + review call</li>
+            <li class="plus">Hands-on review of your Microsoft 365 settings</li>
+            <li class="plus">Evidence pack: screenshots and exports insurers ask for</li>
+            <li class="plus">Help filling in the application itself</li>
+          </ul>
+          <a href="#request" class="btn ghost" data-pick="sprint">Request this</a>
+        </div>
+      </div>
+      <p class="quote-note">Not sure which one? Pick "Help me choose" in the form and I'll recommend one.</p>
+    </section>
+
+    <section id="request">
+      <div class="reqbox">
+        <div class="head" style="margin-bottom:26px">
+          <div class="eyebrow">Request your assessment</div>
+          <h2>Get a quote</h2>
+          <p>No payment now. I'll email you a quote and next steps within one business day.</p>
+        </div>
+        <form class="rform" id="rform" novalidate>
+          <div><label for="r-name">Your name</label><input id="r-name" name="name" autocomplete="name" maxlength="100" required /><div class="err" id="e-name"></div></div>
+          <div><label for="r-email">Work email</label><input id="r-email" name="email" type="email" autocomplete="email" maxlength="254" required /><div class="err" id="e-email"></div></div>
+          <div><label for="r-company">Business name</label><input id="r-company" name="company" autocomplete="organization" maxlength="120" required /><div class="err" id="e-company"></div></div>
+          <div><label for="r-domain">Website or email domain <span style="opacity:.7">(optional)</span></label><input id="r-domain" name="domain" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" maxlength="253" /><div class="err" id="e-domain"></div></div>
+          <div><label for="r-emp">Number of employees</label>
+            <select id="r-emp" name="employees"><option value="">Choose…</option><option>1-10</option><option>11-25</option><option>26-50</option><option>51-100</option><option>101-250</option><option>250+</option></select></div>
+          <div><label for="r-renew">Policy renewal or application date <span style="opacity:.7">(optional)</span></label><input id="r-renew" name="renewal" type="month" /></div>
+          <div class="full"><label>Which option?</label>
+            <div class="pkpick">
+              <label><input type="radio" name="package" value="score" /> Readiness score</label>
+              <label><input type="radio" name="package" value="review" /> Score + review call</label>
+              <label><input type="radio" name="package" value="sprint" /> Renewal sprint</label>
+              <label><input type="radio" name="package" value="unsure" checked /> Help me choose</label>
+            </div></div>
+          <div class="full"><label for="r-notes">Anything I should know? <span style="opacity:.7">(optional)</span></label><textarea id="r-notes" name="notes" maxlength="1500" placeholder="For example: our insurer sent a questionnaire, we use Microsoft 365 Business Standard, renewal is in March."></textarea><div class="err" id="e-notes"></div></div>
+          <div class="hp" aria-hidden="true"><label for="r-web">Website</label><input id="r-web" name="website" tabindex="-1" autocomplete="off" /></div>
+          <p class="legal full">Please don't include passwords or policy numbers. By sending, you agree that I can use these details to reply to you, as described in the <a href="/privacy/">Privacy Policy</a>.</p>
+          <div class="full"><button class="btn" type="submit" id="r-btn">Request my quote</button></div>
+          <div class="rstatus full" id="r-status" role="status"></div>
+        </form>
+        <div class="sent" id="sent">
+          <div class="plane" aria-hidden="true">📨</div>
+          <h3>Request received</h3>
+          <p>Thanks! I'll email you a quote and a secure payment link within one business day. After that, you'll get an invitation to your private portal to start the assessment.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="head"><div class="eyebrow">Questions</div><h2>Good to know</h2></div>
+      <div class="faq">
+        <details><summary>Is this insurance advice, or a guarantee I'll get covered?</summary><p>No. It's a security readiness review that shows how your current setup lines up with what insurers commonly ask. Every insurer decides coverage and pricing on its own. I'm not an insurance agent and don't sell insurance.</p></details>
+        <details><summary>Do I need to be technical to answer?</summary><p>No. Each question is in plain English with a short explanation. If you don't know, pick "I'm not sure". Those go on a find-out list, and on the review call I can help you check.</p></details>
+        <details><summary>How do I pay?</summary><p>After I send your quote, you pay through a secure Stripe payment link. I never see or store your card details.</p></details>
+        <details><summary>What do you do with my answers?</summary><p>They're stored privately in Microsoft Azure, used only to make your report and to help you, and deleted on request. See the <a href="/privacy/">Privacy Policy</a>.</p></details>
+        <details><summary>Can you fix the gaps too?</summary><p>Yes. Most fixes are Microsoft 365, Entra ID, Intune and Defender work, which is exactly what I do. Your report shows which items I can take off your plate.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="yr"></span> CloudShift Labs · The assessment is guidance, not an insurance decision or guarantee. See the <a href="/terms/#readiness">Terms</a> and <a href="/privacy/">Privacy Policy</a>.</footer>
+
+  <script>
+  (() => {
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // ---- Animated application: ticks each box, then stamps it ----
+    const form = document.getElementById('appform');
+    const items = [...document.querySelectorAll('#applist li')];
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timers = [];
+    function play() {
+      timers.forEach(clearTimeout); timers = [];
+      form.classList.remove('stamped', 'thud');
+      items.forEach(li => li.classList.remove('on'));
+      const step = calm ? 0 : 330;
+      items.forEach((li, i) => timers.push(setTimeout(() => li.classList.add('on'), 500 + i * step)));
+      timers.push(setTimeout(() => { form.classList.add('stamped'); timers.push(setTimeout(() => form.classList.add('thud'), 180)); }, 700 + items.length * step));
+    }
+    form.addEventListener('click', play);
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { play(); o.disconnect(); } }, { threshold: .4 }).observe(form);
+
+    // ---- Package buttons preselect the form ----
+    document.querySelectorAll('[data-pick]').forEach(a => a.addEventListener('click', () => {
+      const r = document.querySelector(`input[name=package][value="${a.dataset.pick}"]`);
+      if (r) r.checked = true;
+    }));
+
+    // ---- Request form ----
+    const rf = document.getElementById('rform');
+    const status = document.getElementById('r-status');
+    const btn = document.getElementById('r-btn');
+    const startedAt = Date.now();
+    const fields = ['name', 'email', 'company', 'domain', 'notes'];
+    function showErrors(errs = {}) {
+      for (const f of fields) {
+        const el = rf.elements[f]; const e = document.getElementById('e-' + f);
+        if (e) e.textContent = errs[f] || '';
+        if (el) el.setAttribute('aria-invalid', errs[f] ? 'true' : 'false');
+      }
+    }
+    rf.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      const v = Object.fromEntries(new FormData(rf));
+      const errs = {};
+      if (!v.name.trim()) errs.name = 'Please enter your name.';
+      if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v.email.trim())) errs.email = v.email.trim() ? "That email address doesn't look right." : 'Please enter your email.';
+      if (!v.company.trim()) errs.company = 'Please enter your business name.';
+      showErrors(errs);
+      if (Object.keys(errs).length) { rf.elements[Object.keys(errs)[0]].focus(); return; }
+      btn.disabled = true; btn.textContent = 'Sending…'; status.textContent = ''; status.className = 'rstatus full';
+      try {
+        const res = await fetch('/api/readiness/request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...v, startedAt }) });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) { rf.style.display = 'none'; document.getElementById('sent').classList.add('show'); return; }
+        if (data.errors) showErrors(data.errors);
+        status.textContent = data.error || (data.errors ? 'Please check the highlighted fields.' : 'Something went wrong. Please email tyoung@cloudshiftlabs.net.');
+        status.classList.add('bad');
+      } catch {
+        status.textContent = 'Could not send. Please check your connection, or email tyoung@cloudshiftlabs.net.';
+        status.classList.add('bad');
+      }
+      btn.disabled = false; btn.textContent = 'Request my quote';
+    });
+  })();
+  </script>
+</body>
+</html>

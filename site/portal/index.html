@@ -34,6 +34,7 @@
     .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; margin-top:30px; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px; box-shadow:0 1px 2px rgba(20,28,51,.04), 0 8px 24px rgba(20,28,51,.05); }
     .card.wide { grid-column:1 / -1; }
+    .card.readiness { background:linear-gradient(135deg, #FFF8DE, #FFFFFF 60%); border-color:#F0D98A; }
     .card h2 { font-size:1.1rem; color:var(--navy); margin-bottom:4px; display:flex; align-items:center; gap:8px; }
     .card p { color:var(--muted); font-size:.95rem; }
     .tag { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:99px; background:#FFF3CC; color:#8A6400; }
@@ -95,6 +96,12 @@
         <p class="note">Your live project status will show here soon. Until then, I'll keep you updated by email.</p>
       </section>
 
+      <section class="card wide readiness" aria-labelledby="rd-h">
+        <h2 id="rd-h">📋 Cyber insurance readiness <span class="tag" id="rd-tag">New</span></h2>
+        <p id="rd-text">Answer the questions insurers ask about MFA, backups, EDR and more, and get a scored report with a fix plan. It saves as you go.</p>
+        <div class="btns"><a class="btn" id="rd-btn" href="/portal/readiness/">Open my assessment</a></div>
+      </section>
+
       <section class="card" aria-labelledby="req-h">
         <h2 id="req-h">Need something?</h2>
         <p>Questions, a new request, or something looks off? Send it over and I'll reply within one business day.</p>
@@ -140,6 +147,11 @@
       if (first) document.getElementById('who').textContent = ', ' + first;
       document.getElementById('acct').textContent = p.userDetails || name || 'Signed in';
       const roles = (p.userRoles || []).filter(r => r !== 'anonymous' && r !== 'authenticated');
+      if (!roles.includes('readiness')) {
+        document.getElementById('rd-tag').textContent = 'Available';
+        document.getElementById('rd-text').textContent = 'Find out how you would answer a cyber insurance application before your insurer asks. Request a quote and I will unlock it here.';
+        const b = document.getElementById('rd-btn'); b.textContent = 'Request an assessment'; b.href = '/readiness/#request';
+      }
       document.getElementById('roles').textContent = roles.length ? roles.join(', ') : 'Signed in';
       const mail = document.getElementById('mail');
       mail.href += '&body=' + encodeURIComponent('\n\n---\nSent from the client portal by ' + (p.userDetails || name));

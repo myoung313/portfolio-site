@@ -13,6 +13,12 @@
       "statusCode": 405
     },
     {
+      "route": "/api/readiness/assessment",
+      "allowedRoles": [
+        "readiness"
+      ]
+    },
+    {
       "route": "/login",
       "redirect": "/.auth/login/aad?post_login_redirect_uri=/portal/"
     },
