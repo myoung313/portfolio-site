@@ -140,15 +140,21 @@
   <noscript><p style="text-align:center;padding:20px">Please turn on JavaScript to use the client portal.</p></noscript>
   <script>
   // The page itself only needs a Microsoft sign-in. Whether you're a client is
-  // decided on the server by /api/portal/me (email allow list or "client" role).
+  // decided on the server by /api/portal/me (CLIENT_EMAILS / READINESS_EMAILS
+  // allow lists, or the "client" / "readiness" invite roles).
   (async () => {
-    let ok = false;
+    let me = null;
     try {
       const r = await fetch('/api/portal/me', { cache: 'no-store', credentials: 'same-origin' });
       const type = r.headers.get('content-type') || '';
-      if (r.ok && type.includes('application/json')) ok = (await r.json()).client === true;
+      if (r.ok && type.includes('application/json')) me = await r.json();
     } catch (_) {}
-    if (!ok) { location.replace('/access-denied.html'); return; }
+    if (!me || me.client !== true) { location.replace('/access-denied.html'); return; }
+    if (me.readiness !== true) {
+      document.getElementById('rd-tag').textContent = 'Available';
+      document.getElementById('rd-text').textContent = 'Find out how you would answer a cyber insurance application before your insurer asks. Request a quote and I will unlock it here.';
+      const b = document.getElementById('rd-btn'); b.textContent = 'Request an assessment'; b.href = '/readiness/#request';
+    }
     document.getElementById('checking').remove();
     document.getElementById('portal').hidden = false;
   })();
@@ -166,11 +172,6 @@
       if (first) document.getElementById('who').textContent = ', ' + first;
       document.getElementById('acct').textContent = p.userDetails || name || 'Signed in';
       const roles = (p.userRoles || []).filter(r => r !== 'anonymous' && r !== 'authenticated');
-      if (!roles.includes('readiness')) {
-        document.getElementById('rd-tag').textContent = 'Available';
-        document.getElementById('rd-text').textContent = 'Find out how you would answer a cyber insurance application before your insurer asks. Request a quote and I will unlock it here.';
-        const b = document.getElementById('rd-btn'); b.textContent = 'Request an assessment'; b.href = '/readiness/#request';
-      }
       document.getElementById('roles').textContent = roles.length ? roles.join(', ') : 'Signed in';
       const mail = document.getElementById('mail');
       mail.href += '&body=' + encodeURIComponent('\n\n---\nSent from the client portal by ' + (p.userDetails || name));

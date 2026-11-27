@@ -14,7 +14,7 @@ app.http('portal-me', {
     return {
       status: result.status,
       headers: { 'Cache-Control': 'no-store' },
-      jsonBody: result.status === 200 ? { client: true, email: result.email } : { client: false },
+      jsonBody: result.status === 200 ? { client: true, email: result.email, readiness: result.readiness } : { client: false },
     };
   },
 });

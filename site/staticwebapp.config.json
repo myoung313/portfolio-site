@@ -15,7 +15,7 @@
     {
       "route": "/api/readiness/assessment",
       "allowedRoles": [
-        "readiness"
+        "authenticated"
       ]
     },
     {
