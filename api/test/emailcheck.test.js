@@ -167,3 +167,21 @@ test('+all caps the grade at D', () => {
   const checks = [{ id: 'spf', records: ['v=spf1 +all'] }, { id: 'dmarc', records: ['v=DMARC1; p=reject'] }];
   assert.strictEqual(ec.gradeFor(80, checks), 'D');
 });
+
+test('M365 include nested inside another include counts', async () => {
+  const zone = {
+    'x.com|TXT': t('v=spf1 include:_spf.x.com -all'),
+    '_spf.x.com|TXT': t('v=spf1 include:spf.protection.outlook.com -all'),
+    'spf.protection.outlook.com|TXT': t('v=spf1 ip4:40.92.0.0/15 -all'),
+  };
+  const r = await ec.checkSpf(fakeDns(zone), 'x.com', 'Microsoft 365');
+  assert.strictEqual(r.status, 'pass');
+  assert.strictEqual(r.points, 25);
+});
+
+test('parked domain (null MX) does not need DKIM', async () => {
+  const zone = { 'parked.com|NS': ['ns'], 'parked.com|MX': [{ exchange: '', priority: 0 }], 'parked.com|TXT': t('v=spf1 -all'), '_dmarc.parked.com|TXT': t('v=DMARC1; p=reject; rua=mailto:d@parked.com') };
+  const r = await ec.runCheckup('parked.com', { dns: fakeDns(zone) });
+  assert.strictEqual(r.checks.find(c => c.id === 'dkim').status, 'pass');
+  assert.strictEqual(r.grade, 'A');
+});

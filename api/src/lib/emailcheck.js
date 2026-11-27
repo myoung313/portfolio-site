@@ -133,6 +133,7 @@ async function countSpfLookups(dns, record, budget = { queries: 0 }, seen = new 
     if (isInclude || isRedirect) {
       count++;
       const target = t.slice(isInclude ? 8 : 9);
+      if (budget.includes) budget.includes.add(target);
       if (seen.has(target) || budget.queries >= MAX_SPF_QUERIES || target.includes('%')) continue;
       seen.add(target);
       budget.queries++;
@@ -166,12 +167,13 @@ async function checkSpf(dns, domain, provider) {
   const record = spf[0].trim();
   const allTerm = (record.match(/(?:^|\s)([+\-~?]?)all(?:\s|$)/i) || [])[1];
   const hasRedirect = /\sredirect=/i.test(record);
-  const lookups = await countSpfLookups(dns, record);
+  const budget = { queries: 0, includes: new Set() };
+  const lookups = await countSpfLookups(dns, record, budget);
   const notes = [];
   let points; let status; let summary; let fix;
 
   if (allTerm === '-') { points = 25; status = 'pass'; summary = 'SPF is set to hard fail (-all). Only the senders you listed can send as you.'; }
-  else if (allTerm === '~') { points = 20; status = 'pass'; summary = 'SPF is set to soft fail (~all). That is the usual Microsoft 365 setup and works well once DMARC is enforced.'; }
+  else if (allTerm === '~') { points = 20; status = 'pass'; summary = 'SPF is set to soft fail (~all). That is a common setup and works well once DMARC is enforced.'; }
   else if (allTerm === '?') { points = 8; status = 'warn'; summary = 'SPF ends in ?all (neutral), which tells receivers nothing. It protects almost nothing.'; fix = { text: 'Change the ending to ~all or -all:', record: `${domain}.  TXT  "${record.replace(/(^|\s)\?all(?=\s|$)/i, '$1-all')}"` }; }
   else if (allTerm === '' || allTerm === '+') { points = 0; status = 'fail'; summary = 'SPF ends in +all, which lets every server on the internet send as you. This is worse than having no SPF.'; fix = { text: 'Replace +all with -all right away:', record: `${domain}.  TXT  "${record.replace(/(^|\s)\+?all(?=\s|$)/i, '$1-all')}"` }; }
   else if (hasRedirect) { points = 22; status = 'pass'; summary = 'SPF hands off to another record (redirect=), which is a valid setup.'; }
@@ -184,7 +186,7 @@ async function checkSpf(dns, domain, provider) {
   } else {
     notes.push(`${lookups} of 10 allowed DNS lookups used.`);
   }
-  if (provider === 'Microsoft 365' && !/include:spf\.protection\.outlook\.com/i.test(record) && !hasRedirect) {
+  if (provider === 'Microsoft 365' && !budget.includes.has('spf.protection.outlook.com') && !hasRedirect && budget.queries < MAX_SPF_QUERIES) {
     notes.push("Your mail runs on Microsoft 365, but SPF doesn't include spf.protection.outlook.com. Email you send may fail SPF.");
     if (status === 'pass') status = 'warn';
     points = Math.max(0, points - 8);
@@ -207,7 +209,7 @@ function dkimKeyInfo(record) {
   return { type, bits };
 }
 
-async function checkDkim(dns, domain, provider) {
+async function checkDkim(dns, domain, provider, noMail = false) {
   const base = { id: 'dkim', title: 'DKIM (tamper-proof signature)', max: POINTS.dkim };
   const results = await Promise.all(DKIM_SELECTORS.map(async sel => {
     const name = `${sel}._domainkey.${domain}`;
@@ -228,14 +230,16 @@ async function checkDkim(dns, domain, provider) {
 
   if (active.length) {
     const weak = active.filter(a => a.type === 'rsa' && a.bits < 2048);
-    const list = active.map(a => `${a.selector} (${a.type === 'rsa' ? `RSA ${a.bits}-bit` : a.type})`).join(', ');
     if (weak.length) {
-      return { ...base, status: 'warn', points: 15, selectors: active, summary: `DKIM is on (${list}), but ${weak.length > 1 ? 'some keys are' : 'a key is'} only 1024-bit.`, fix: { text: provider === 'Microsoft 365' ? 'In Defender, open your domain under DKIM and choose "Rotate DKIM keys" to move to 2048-bit keys.' : 'Ask your email provider to rotate to a 2048-bit DKIM key.' } };
+      return { ...base, status: 'warn', points: 15, selectors: active, summary: `DKIM signing is on, but ${weak.length > 1 ? `${weak.length} keys are` : 'one key is'} only 1024-bit. Microsoft and Google recommend 2048-bit.`, fix: { text: provider === 'Microsoft 365' ? 'In Defender, open your domain under DKIM and choose "Rotate DKIM keys" to move to 2048-bit keys.' : 'Ask your email provider to rotate to a 2048-bit DKIM key.' } };
     }
     return { ...base, status: 'pass', points: POINTS.dkim, selectors: active, summary: `DKIM signing is set up with ${active.length === 1 ? 'a strong key' : `${active.length} strong keys`}. Receivers can tell your email really came from you and wasn't changed.` };
   }
   if (danglingM365.length) {
     return { ...base, status: 'fail', points: 4, summary: 'The Microsoft 365 DKIM records are in DNS, but signing is not turned on, so your email goes out unsigned.', fix: m365Fix };
+  }
+  if (noMail) {
+    return { ...base, status: 'pass', points: POINTS.dkim, summary: "This domain is set up to never send or receive email, so it doesn't need DKIM." };
   }
   if (results.every(r => r.error)) {
     return { ...base, status: 'error', points: 0, summary: "We couldn't look up DKIM right now. Try again in a minute." };
@@ -375,7 +379,7 @@ async function runCheckup(domain, { dns, fetchText } = {}) {
   }
   const [spf, dkim, dmarc, extras] = await Promise.all([
     checkSpf(dns, domain, mx.provider),
-    checkDkim(dns, domain, mx.provider),
+    checkDkim(dns, domain, mx.provider, mx.nullMx),
     checkDmarc(dns, domain),
     checkExtras(dns, domain, fetchText),
   ]);
