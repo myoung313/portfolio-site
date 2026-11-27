@@ -101,6 +101,20 @@
     .contact .alt-email { font-size:.9rem; margin:22px auto 0; }
     @media (max-width:600px) { .cform { grid-template-columns:1fr; } }
 
+    /* Email checkup promo */
+    .checkup { display:grid; grid-template-columns:1.1fr 1fr; gap:36px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:40px; }
+    .checkup h2 { font-size:2rem; margin:8px 0 12px; }
+    .checkup p { color:var(--muted); margin-bottom:20px; }
+    .checkup form { display:flex; gap:10px; background:var(--navy); border:1px solid var(--line); border-radius:14px; padding:6px; }
+    .checkup form:focus-within { border-color:var(--gold); }
+    .checkup input { flex:1; min-width:0; background:transparent; border:0; color:var(--text); font:inherit; padding:10px 12px; }
+    .checkup input:focus { outline:none; }
+    .checkup button { border:0; cursor:pointer; font:inherit; font-weight:600; }
+    .grades { display:flex; gap:10px; justify-content:center; }
+    .grades span { width:64px; height:64px; border-radius:50%; display:grid; place-items:center; font-size:1.7rem; font-weight:800; border:4px solid currentColor; }
+    @media (max-width:780px) { .checkup { grid-template-columns:1fr; padding:28px 20px; } .grades span { width:52px; height:52px; font-size:1.35rem; } }
+    @media (max-width:480px) { .checkup form { flex-direction:column; } }
+
     footer { border-top:1px solid var(--line); padding:28px 0; color:var(--muted); font-size:.85rem; }
     footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 
@@ -121,6 +135,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#process">How I work</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="/checkup/">✉ Free email checkup</a></li>
         <li><a href="/phish/">🎣 Play: Phish or Legit?</a></li>
       </ul>
       <a href="#contact" class="btn">Book a call</a>
@@ -221,6 +236,26 @@
         <div class="step"><h3>Assess</h3><p>I review your environment and give you a prioritized list, worst risks first.</p></div>
         <div class="step"><h3>Fix</h3><p>I implement the changes with minimal disruption and test everything.</p></div>
         <div class="step"><h3>Hand off</h3><p>You get documentation and a walkthrough so you know exactly what changed.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="checkup" class="alt">
+    <div class="wrap">
+      <div class="checkup">
+        <div>
+          <div class="eyebrow">Free tool</div>
+          <h2>✉ Can someone fake your email?</h2>
+          <p>Get an instant grade for your domain's SPF, DKIM and DMARC setup, with plain-English fixes for Microsoft 365 and Google Workspace. No sign-up needed.</p>
+          <form action="/checkup/" method="get">
+            <label for="ck-domain" style="position:absolute;left:-9999px">Your domain</label>
+            <input id="ck-domain" name="d" type="text" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" required />
+            <button class="btn" type="submit">Check my domain</button>
+          </form>
+        </div>
+        <div class="grades" aria-hidden="true">
+          <span style="color:#30A46C">A</span><span style="color:#F5B700">C</span><span style="color:#E5484D">F</span>
+        </div>
       </div>
     </div>
   </section>
@@ -330,6 +365,12 @@
       if (!form) return;
       const startedAt = Date.now();
       const status = document.getElementById('cf-status');
+      // Prefill from the email checkup ("Get help fixing this" links here with ?msg=).
+      const prefill = new URLSearchParams(location.search).get('msg');
+      if (prefill) {
+        form.elements.message.value = prefill.slice(0, 1000);
+        history.replaceState(null, '', location.pathname + location.hash);
+      }
       const btn = form.querySelector('button');
       const fields = ['name', 'email', 'company', 'message'];
       const setErr = (f, msg) => {
