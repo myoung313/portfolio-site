@@ -187,14 +187,14 @@
       <p class="lead">Once your quote is paid, I'll switch it on for your account and you'll be able to start right here. Already paid? It can take up to one business day. Email me and I'll check.</p>
       <div class="acts" style="margin-top:20px">
         <a class="btn gold" href="/readiness/#request">Request an assessment</a>
-        <a class="btn ghost" href="mailto:tyoung@cloudshiftlabs.net?subject=Readiness%20assessment%20access">Email Taz</a>
+        <a class="btn ghost" href="mailto:support@cloudshiftlabs.net?subject=Readiness%20assessment%20access">Email Taz</a>
       </div>
     </section>
 
     <!-- Error -->
     <section class="view" id="v-error">
       <h1>Something went wrong</h1>
-      <p class="lead" id="err-msg">Please refresh the page in a minute. If it keeps happening, email tyoung@cloudshiftlabs.net.</p>
+      <p class="lead" id="err-msg">Please refresh the page in a minute. If it keeps happening, email support@cloudshiftlabs.net.</p>
     </section>
 
     <!-- Questionnaire -->
@@ -274,8 +274,8 @@
           <p>Most of this plan is Microsoft 365, Entra ID, Intune and Defender work. I can walk you through it on a call, or do it for you.</p>
         </div>
         <div class="acts">
-          <a class="btn gold" id="book" href="mailto:tyoung@cloudshiftlabs.net?subject=Readiness%20report%20review">Book my review</a>
-          <a class="btn ghost" style="color:#fff;border-color:#2F3B63" id="fixit" href="mailto:tyoung@cloudshiftlabs.net?subject=Help%20fixing%20my%20readiness%20gaps">Fix these for me</a>
+          <a class="btn gold" id="book" href="mailto:support@cloudshiftlabs.net?subject=Readiness%20report%20review">Book my review</a>
+          <a class="btn ghost" style="color:#fff;border-color:#2F3B63" id="fixit" href="mailto:support@cloudshiftlabs.net?subject=Help%20fixing%20my%20readiness%20gaps">Fix these for me</a>
         </div>
       </div>
 
@@ -490,7 +490,7 @@
       document.querySelectorAll('.fix').forEach((el, i) => setTimeout(() => el.classList.add('in'), 600 + i * (calm ? 0 : 90)));
 
       const subj = encodeURIComponent(`Readiness report review: ${r.company || ''} (${r.score}/100)`);
-      $('book').href = `mailto:tyoung@cloudshiftlabs.net?subject=${subj}`;
+      $('book').href = `mailto:support@cloudshiftlabs.net?subject=${subj}`;
     }
 
     $('print').addEventListener('click', () => { document.querySelectorAll('.fix').forEach(el => el.classList.add('in')); window.print(); });

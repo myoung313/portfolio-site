@@ -380,10 +380,10 @@
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.ok) { rf.style.display = 'none'; document.getElementById('sent').classList.add('show'); return; }
         if (data.errors) showErrors(data.errors);
-        status.textContent = data.error || (data.errors ? 'Please check the highlighted fields.' : 'Something went wrong. Please email tyoung@cloudshiftlabs.net.');
+        status.textContent = data.error || (data.errors ? 'Please check the highlighted fields.' : 'Something went wrong. Please email support@cloudshiftlabs.net.');
         status.classList.add('bad');
       } catch {
-        status.textContent = 'Could not send. Please check your connection, or email tyoung@cloudshiftlabs.net.';
+        status.textContent = 'Could not send. Please check your connection, or email support@cloudshiftlabs.net.';
         status.classList.add('bad');
       }
       btn.disabled = false; btn.textContent = 'Request my quote';

@@ -363,7 +363,7 @@
           <p class="legal">By sending, you agree that I can use your details to reply to you, as described in the <a href="/privacy/">Privacy Policy</a>.</p>
           <div class="cstatus" id="cf-status" role="status" aria-live="polite"></div>
         </form>
-        <p class="alt-email">Prefer email? <a href="mailto:tyoung@cloudshiftlabs.net?subject=Security%20review%20request">tyoung@cloudshiftlabs.net</a></p>
+        <p class="alt-email">Prefer email? <a href="mailto:support@cloudshiftlabs.net?subject=Security%20review%20request">support@cloudshiftlabs.net</a></p>
       </div>
     </div>
   </section>
@@ -439,10 +439,10 @@
             Object.entries(out.errors).forEach(([f, m]) => fields.includes(f) ? setErr(f, m) : say(m, 'bad'));
             if (!status.textContent) say('Please fix the highlighted fields.', 'bad');
           } else {
-            say(out.error || 'Something went wrong. Please email tyoung@cloudshiftlabs.net instead.', 'bad');
+            say(out.error || 'Something went wrong. Please email support@cloudshiftlabs.net instead.', 'bad');
           }
         } catch {
-          say('Could not reach the server. Please email tyoung@cloudshiftlabs.net instead.', 'bad');
+          say('Could not reach the server. Please email support@cloudshiftlabs.net instead.', 'bad');
         } finally {
           btn.disabled = false;
         }
