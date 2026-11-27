@@ -63,7 +63,7 @@
     {
       "route": "/portal/*",
       "allowedRoles": [
-        "client"
+        "authenticated"
       ],
       "headers": {
         "Cache-Control": "no-store",
@@ -73,7 +73,7 @@
     {
       "route": "/portal*",
       "allowedRoles": [
-        "client"
+        "authenticated"
       ],
       "headers": {
         "Cache-Control": "no-store",

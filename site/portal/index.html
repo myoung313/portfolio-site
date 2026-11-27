@@ -80,7 +80,7 @@
     </div>
   </nav>
 
-  <main>
+  <main id="portal" hidden>
     <p class="eyebrow">Client portal</p>
     <h1>Welcome back<span id="who"></span>.</h1>
     <p class="lead">This is your private space for your CloudShift Labs project: where things stand, what's next, and a quick way to reach me.</p>
@@ -136,6 +136,23 @@
 
   <footer>© <span id="yr"></span> CloudShift Labs · Private client area. Access is by invitation only. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></footer>
 
+  <p id="checking" style="text-align:center;color:#5E6680;padding:60px 20px">Checking your access…</p>
+  <noscript><p style="text-align:center;padding:20px">Please turn on JavaScript to use the client portal.</p></noscript>
+  <script>
+  // The page itself only needs a Microsoft sign-in. Whether you're a client is
+  // decided on the server by /api/portal/me (email allow list or "client" role).
+  (async () => {
+    let ok = false;
+    try {
+      const r = await fetch('/api/portal/me', { cache: 'no-store', credentials: 'same-origin' });
+      const type = r.headers.get('content-type') || '';
+      if (r.ok && type.includes('application/json')) ok = (await r.json()).client === true;
+    } catch (_) {}
+    if (!ok) { location.replace('/access-denied.html'); return; }
+    document.getElementById('checking').remove();
+    document.getElementById('portal').hidden = false;
+  })();
+  </script>
   <script>
   (async () => {
     document.getElementById('yr').textContent = new Date().getFullYear();
