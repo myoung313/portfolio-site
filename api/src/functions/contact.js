@@ -85,7 +85,11 @@ app.http('contact', {
       return json(200, { ok: true });
     } catch (err) {
       context.error('Contact form failed', err);
-      return json(500, { ok: false, error: 'Something went wrong on my side. Please email me directly.' });
+      // Short, secret-free reason so problems can be diagnosed from the browser
+      // (managed functions on the Free plan have no log stream).
+      const ref = [err.name, err.code, err.statusCode].filter(Boolean).join('/') || 'unknown';
+      const hint = String(err.message || '').replace(/AccountKey=[^;\s]+/gi, 'AccountKey=***').split('\n')[0].slice(0, 140);
+      return json(500, { ok: false, error: `Something went wrong on my side. Please email me directly. [ref: ${ref}: ${hint}]`, ref, hint });
     }
   },
 });
