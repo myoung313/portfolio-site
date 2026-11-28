@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
+  <title>Site Ratings | Admin | CloudShift Labs</title>
+  <style>
+    /* Same "lights on" palette as the client portal. */
+    :root {
+      --bg:#FBF8F1; --bg2:#F3EEE2; --card:#FFFFFF; --line:#E4DCC8;
+      --navy:#141C33; --text:#1E2540; --muted:#5E6680; --gold:#F5B700; --gold-d:#B98900;
+      --ok:#2E8B57; --bad:#C4382F; --hold:#C77700;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--bg); }
+    body { font-family:"Segoe UI", system-ui, -apple-system, sans-serif; color:var(--text); line-height:1.55; min-height:100vh;
+      background:var(--bg) radial-gradient(ellipse 1100px 600px at 50% -10%, rgba(245,183,0,.22), transparent 70%) no-repeat; }
+    a { color:var(--gold-d); text-decoration:none; font-weight:600; }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:14px; max-width:900px; margin:0 auto; padding:16px 20px; }
+    .logo { font-weight:700; letter-spacing:.04em; color:var(--navy); }
+    .logo span { color:var(--gold-d); }
+    nav .r { display:flex; gap:16px; font-size:.9rem; }
+    nav .r a { color:var(--muted); font-weight:500; white-space:nowrap; }
+    .logo { white-space:nowrap; }
+    main { max-width:900px; margin:0 auto; padding:10px 20px 60px; }
+    .eyebrow { color:var(--gold-d); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem; }
+    h1 { font-size:clamp(1.7rem, 4.5vw, 2.3rem); line-height:1.2; margin:6px 0 6px; color:var(--navy); }
+    .lead { color:var(--muted); }
+
+    .tabs { display:flex; gap:6px; margin:24px 0 16px; border-bottom:1px solid var(--line); overflow-x:auto; }
+    .tabs button { background:none; border:0; font:inherit; font-weight:600; color:var(--muted); padding:10px 12px; border-bottom:3px solid transparent; cursor:pointer; white-space:nowrap; }
+    .tabs button.on { color:var(--navy); border-color:var(--gold); }
+    .tabs .n { display:inline-grid; place-items:center; min-width:22px; height:22px; border-radius:99px; background:var(--bg2); font-size:.75rem; margin-left:6px; padding:0 6px; }
+    .tabs button.on .n { background:var(--gold); color:var(--navy); }
+    .tabs .n.pop { animation:pop .35s ease; }
+    @keyframes pop { 50% { transform:scale(1.35); } }
+
+    .item { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:14px; position:relative;
+      box-shadow:0 1px 2px rgba(20,28,51,.04), 0 8px 24px rgba(20,28,51,.05); transition:transform .5s cubic-bezier(.5,-0.4,.7,1), opacity .5s; }
+    .item .meta { display:flex; flex-wrap:wrap; gap:4px 12px; align-items:baseline; font-size:.85rem; color:var(--muted); }
+    .item .meta b { color:var(--navy); font-size:.98rem; }
+    .item .meta .st { color:var(--gold-d); letter-spacing:1px; }
+    .item .txt { margin:8px 0 10px; white-space:pre-wrap; word-wrap:break-word; font-size:1rem; }
+    .flags { display:flex; flex-wrap:wrap; gap:6px; }
+    .flag { font-size:.75rem; font-weight:700; border-radius:99px; padding:2px 10px; background:#FFF1DD; color:#8A4B00; border:1px solid #F4D3A6; }
+    .flag.red { background:#FDE7E5; color:#9A2A22; border-color:#F3C1BC; }
+    .flag.gray { background:var(--bg2); color:var(--muted); border-color:var(--line); }
+    .meter { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:6px 16px; margin-top:12px; font-size:.78rem; color:var(--muted); }
+    .meter div { display:grid; grid-template-columns:70px 1fr; align-items:center; gap:8px; }
+    .meter i { display:block; height:6px; border-radius:6px; background:var(--bg2); position:relative; overflow:hidden; }
+    .meter i::after { content:""; position:absolute; inset:0 auto 0 0; width:var(--w); background:var(--c, var(--ok)); border-radius:6px; }
+    .acts { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .acts button { font:inherit; font-weight:600; font-size:.9rem; border-radius:10px; padding:8px 14px; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); }
+    .acts .ap { background:var(--ok); border-color:var(--ok); color:#fff; }
+    .acts .rj { color:var(--bad); }
+    .acts button:hover { transform:translateY(-1px); }
+    .replybox { display:none; margin-top:10px; }
+    .replybox.open { display:block; }
+    .replybox textarea { width:100%; min-height:70px; font:inherit; border:1px solid var(--line); border-radius:10px; padding:10px; }
+    .existing { margin-top:10px; border-left:3px solid var(--gold); background:#FFF9E8; padding:8px 12px; border-radius:0 10px 10px 0; font-size:.9rem; }
+    .empty { text-align:center; color:var(--muted); padding:50px 10px; }
+    .empty .big { font-size:2.6rem; }
+
+    /* Approve: a green stamp lands, then the card lifts away. Reject: the card goes through the shredder. */
+    .stamp { position:absolute; right:18px; top:14px; border:3px solid var(--ok); color:var(--ok); border-radius:8px; padding:2px 12px; font-weight:800; letter-spacing:.12em;
+      text-transform:uppercase; transform:rotate(-9deg) scale(2.4); opacity:0; animation:stamp .35s cubic-bezier(.3,1.6,.5,1) forwards; background:#fff; }
+    @keyframes stamp { to { transform:rotate(-9deg) scale(1); opacity:1; } }
+    .item.lift { transform:translateY(-30px) scale(.97); opacity:0; }
+    .item.shred { animation:shred .8s ease-in forwards; }
+    @keyframes shred {
+      0% { clip-path:inset(0 0 0 0); }
+      30% { transform:translateY(6px); }
+      100% { transform:translateY(80px); opacity:0;
+        -webkit-mask:repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 18px); mask:repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 18px); }
+    }
+    .toast { position:fixed; left:50%; bottom:22px; transform:translate(-50%, 120%); background:var(--navy); color:#fff; padding:10px 18px; border-radius:12px; font-size:.9rem; transition:transform .3s, visibility .3s; visibility:hidden; }
+    .toast.show { transform:translate(-50%, 0); visibility:visible; }
+    .badge { font-size:.66rem; background:var(--navy); color:#fff; padding:2px 8px; border-radius:99px; letter-spacing:.08em; vertical-align:middle; margin-left:4px; }
+    .atabs { display:flex; gap:8px; margin:18px 0 0; flex-wrap:wrap; }
+    .atabs a { padding:7px 14px; border-radius:99px; font-size:.9rem; font-weight:600; color:var(--muted); border:1px solid var(--line); background:#fff; }
+    .atabs a.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+    footer { text-align:center; color:var(--muted); font-size:.8rem; padding:0 20px 36px; }
+    @media (prefers-reduced-motion:reduce) { .item, .item.shred, .stamp { animation:none !important; transition:none; } }
+  
+    .atabs { display:flex; gap:8px; margin:18px 0 0; flex-wrap:wrap; }
+    .atabs a { padding:7px 14px; border-radius:99px; font-size:.9rem; font-weight:600; color:var(--muted); border:1px solid var(--line); background:#fff; }
+    .atabs a.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+    footer { text-align:center; color:var(--muted); font-size:.8rem; padding:0 20px 36px; }
+
+    /* Scoreboard: big average, then one bar per star level that grows in. */
+    .score { display:grid; grid-template-columns:auto 1fr; gap:18px 26px; align-items:center; background:var(--navy); color:#fff; border-radius:18px; padding:20px 22px; margin:22px 0 6px; }
+    .score .avg { font-size:3rem; font-weight:800; line-height:1; color:var(--gold); }
+    .score .avg small { display:block; font-size:.8rem; font-weight:600; color:#C9CEDD; margin-top:6px; letter-spacing:.04em; }
+    .score .stars { color:var(--gold); letter-spacing:2px; font-size:1rem; margin-top:4px; }
+    .dist { display:grid; gap:6px; font-size:.82rem; }
+    .dist div { display:grid; grid-template-columns:28px 1fr 30px; gap:8px; align-items:center; }
+    .dist i { height:8px; border-radius:8px; background:rgba(255,255,255,.12); overflow:hidden; display:block; }
+    .dist i b { display:block; height:100%; width:0; background:var(--gold); border-radius:8px; transition:width .9s cubic-bezier(.2,.8,.2,1); }
+    .dist span:last-child { text-align:right; color:#C9CEDD; }
+    .item .page { font-size:.78rem; background:var(--bg2); border:1px solid var(--line); border-radius:99px; padding:1px 9px; color:var(--muted); }
+    .item.nocomment .txt { color:var(--muted); font-style:italic; }
+    .item.new { animation:drop .5s cubic-bezier(.3,1.4,.5,1) both; }
+    @keyframes drop { from { transform:translateY(-14px); opacity:0; } }
+    .note { font-size:.85rem; color:var(--muted); margin-top:10px; }
+    @media (max-width:480px) { .score { grid-template-columns:1fr; } nav .hide-sm { display:none; } }
+    @media (prefers-reduced-motion:reduce) { .item, .item.shred, .item.new { animation:none !important; transition:none; } .dist i b { transition:none; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/admin-portal/" class="logo">CLOUDSHIFT <span>LABS</span> <b class="badge">ADMIN</b></a>
+    <div class="r"><a href="/portal/" class="hide-sm">Client portal</a><a href="/logout">Sign out</a></div>
+  </nav>
+
+  <main>
+    <p class="eyebrow">Admin portal</p>
+    <h1>Site ratings</h1>
+    <p class="lead">Everything sent from the floating "Rate this site" button. These are private: visitors were told only you read them, so they never appear on the public thread.</p>
+
+    <div class="atabs"><a href="/admin-portal/">Clients</a><a href="/admin-portal/comments/">Comments review</a><a href="/admin-portal/ratings/" class="on" aria-current="page">Site ratings</a><a href="/admin-portal/leaderboard/">Leaderboard</a></div>
+
+    <div id="app">
+      <div class="score" id="score" hidden>
+        <div><div class="avg" id="avg">–</div><div class="stars" id="avgstars"></div><small id="count"></small></div>
+        <div class="dist" id="dist"></div>
+      </div>
+      <div class="tabs" id="tabs">
+        <button type="button" class="on" data-f="text">With suggestions <span class="n" id="n-text">0</span></button>
+        <button type="button" data-f="all">All ratings <span class="n" id="n-all">0</span></button>
+        <button type="button" data-f="low">1–2 stars <span class="n" id="n-low">0</span></button>
+      </div>
+      <div id="list"><div class="empty">Loading…</div></div>
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+  <footer>Admin area · only accounts listed in the ADMIN_EMAILS setting can use it.</footer>
+
+  <script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const when = iso => iso ? new Date(iso).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+    const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+    const PAGE = p => p === '/' ? 'Home' : p.replace(/^\/|\/$/g, '') || 'Home';
+    let all = [], filter = 'text';
+
+    const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); };
+    const pick = () => filter === 'text' ? all.filter(r => r.comment) : filter === 'low' ? all.filter(r => r.stars <= 2) : all;
+
+    function scoreboard(s) {
+      $('score').hidden = false;
+      $('avg').textContent = s.average ?? '–';
+      $('avgstars').textContent = s.average ? stars(Math.round(s.average)) : '';
+      $('count').textContent = `${s.count} rating${s.count === 1 ? '' : 's'} · ${s.withText} with suggestions`;
+      const max = Math.max(1, ...s.distribution);
+      $('dist').innerHTML = [5, 4, 3, 2, 1].map(n => `<div><span>${n}★</span><i><b data-w="${(s.distribution[n - 1] / max) * 100}"></b></i><span>${s.distribution[n - 1]}</span></div>`).join('');
+      requestAnimationFrame(() => requestAnimationFrame(() => $('dist').querySelectorAll('b').forEach(b => b.style.width = b.dataset.w + '%')));
+    }
+
+    function counts() {
+      $('n-text').textContent = all.filter(r => r.comment).length;
+      $('n-all').textContent = all.length;
+      $('n-low').textContent = all.filter(r => r.stars <= 2).length;
+    }
+
+    function render() {
+      const rows = pick();
+      $('list').innerHTML = rows.length ? rows.map((r, i) => `<div class="item new ${r.comment ? '' : 'nocomment'}" data-id="${esc(r.id)}" data-pk="${esc(r.pk)}" style="animation-delay:${reduce ? 0 : Math.min(i, 8) * 60}ms">
+          <div class="meta"><span class="st">${stars(r.stars)}</span><span class="page">${esc(PAGE(r.page))}</span><span>${when(r.at)}</span></div>
+          <div class="txt">${r.comment ? esc(r.comment) : 'Stars only, no suggestion.'}</div>
+          <div class="acts"><button class="rj" data-a="delete">✕ Delete</button></div>
+        </div>`).join('')
+        : `<div class="empty"><div class="big">📭</div>${filter === 'text' ? 'No suggestions yet.' : 'Nothing here yet.'}</div>`;
+    }
+
+    async function load() {
+      const res = await fetch('/api/ratings/admin', { cache: 'no-store' });
+      const out = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 403) {
+        $('app').innerHTML = `<div class="empty"><div class="big">🔒</div>${esc(out.error || 'Admins only.')}<br>Signed in with the wrong account? <a href="/logout">Sign out</a> and try again.</div>`;
+        return;
+      }
+      if (!res.ok || !out.ok) { $('list').innerHTML = `<div class="empty">${esc(out.error || 'Could not load ratings.')}</div>`; return; }
+      all = out.ratings || [];
+      scoreboard(out); counts(); render();
+    }
+
+    $('list').addEventListener('click', async e => {
+      const b = e.target.closest('button[data-a="delete"]'); if (!b) return;
+      const el = b.closest('.item');
+      if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again to delete'; setTimeout(() => { b.dataset.sure = ''; b.textContent = '✕ Delete'; }, 3000); return; }
+      b.disabled = true;
+      const res = await fetch('/api/ratings/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id: el.dataset.id, pk: el.dataset.pk }) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) { toast(out.error || 'That did not work. Try again.'); b.disabled = false; return; }
+      el.classList.remove('new'); el.classList.add('shred');
+      await sleep(reduce ? 0 : 800);
+      all = all.filter(r => r.id !== el.dataset.id);
+      scoreboard({ ...out, withText: all.filter(r => r.comment).length }); counts(); render();
+      toast('Rating deleted');
+    });
+
+    $('tabs').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      [...$('tabs').children].forEach(x => x.classList.toggle('on', x === b));
+      filter = b.dataset.f; render();
+    });
+    load();
+  })();
+  </script>
+</body>
+</html>
