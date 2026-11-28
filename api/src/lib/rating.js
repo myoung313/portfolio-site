@@ -41,4 +41,9 @@ function summarize(row) {
   return { count, average: count ? Math.round((total / count) * 10) / 10 : null, distribution: dist };
 }
 
-module.exports = { checkRating, summarize, MAX_COMMENT, MIN_FILL_MS };
+/** What the admin portal sees for one stored rating (no IP hash). */
+function adminRatingView(e) {
+  return { pk: e.partitionKey, id: e.rowKey, stars: Number(e.stars) || 0, comment: e.comment || '', page: e.page || '/', at: e.submittedAt || null };
+}
+
+module.exports = { checkRating, summarize, adminRatingView, MAX_COMMENT, MIN_FILL_MS };

@@ -1,7 +1,8 @@
 const { app } = require('@azure/functions');
 const { TableClient } = require('@azure/data-tables');
 const crypto = require('crypto');
-const { checkRating, summarize } = require('../lib/rating');
+const { checkRating, summarize, adminRatingView } = require('../lib/rating');
+const { isAdmin } = require('./comments');
 
 // Same storage account as the contact form, separate tables.
 const RATINGS_TABLE = 'SiteRatings';        // one row per rating (stars, optional comment)
@@ -52,11 +53,11 @@ async function readSummary(summary) {
 
 // Add one vote to the running totals. Uses the ETag so two votes at the same
 // moment can't overwrite each other; retries a few times on conflict.
-async function addToSummary(summary, stars) {
+async function addToSummary(summary, stars, delta = 1) {
   for (let attempt = 0; attempt < 5; attempt++) {
     const row = await readSummary(summary);
     const next = { ...SUMMARY_KEY };
-    for (let n = 1; n <= 5; n++) next[`s${n}`] = (Number(row?.[`s${n}`]) || 0) + (n === stars ? 1 : 0);
+    for (let n = 1; n <= 5; n++) next[`s${n}`] = Math.max(0, (Number(row?.[`s${n}`]) || 0) + (n === stars ? delta : 0));
     try {
       if (row) await summary.updateEntity(next, 'Replace', { etag: row.etag });
       else await summary.createEntity(next);
@@ -126,6 +127,47 @@ app.http('ratings', {
     } catch (err) {
       context.error('Rating failed', err);
       return json(500, { ok: false, error: 'Something went wrong saving your rating. Please try again later.' });
+    }
+  },
+});
+
+// Admin view of the widget's ratings and suggestions. They stay private: this
+// only lists them for the admin portal (and lets the admin delete junk).
+const ADMIN_MAX = 300;
+app.http('ratingsAdmin', {
+  methods: ['GET', 'POST'],
+  authLevel: 'anonymous',
+  route: 'ratings/admin',
+  handler: async (request, context) => {
+    if (!request.headers.get('x-ms-client-principal')) return json(401, { ok: false, error: 'Please sign in.' });
+    if (!isAdmin(request)) return json(403, { ok: false, notAdmin: true, error: 'This account is not on the admin list.' });
+    try {
+      const { ratings, summary } = await getClients();
+
+      if (request.method === 'GET') {
+        const rows = [];
+        for await (const e of ratings.listEntities()) rows.push(e);
+        rows.sort((a, b) => String(b.submittedAt).localeCompare(String(a.submittedAt)));
+        const withText = rows.filter(r => r.comment).length;
+        return json(200, { ok: true, ...summarize(await readSummary(summary)), withText, ratings: rows.slice(0, ADMIN_MAX).map(adminRatingView) });
+      }
+
+      let body;
+      try { body = await request.json(); } catch { return json(400, { ok: false, error: 'Invalid request.' }); }
+      const pk = String(body?.pk || ''), id = String(body?.id || '');
+      if (body?.action !== 'delete' || !/^\d{4}-\d{2}$/.test(pk) || !/^\d{16}-[0-9a-f]{8}$/.test(id)) return json(400, { ok: false, error: 'Unknown rating.' });
+      let row;
+      try { row = await ratings.getEntity(pk, id); } catch (err) {
+        if (err.statusCode === 404) return json(404, { ok: false, error: 'That rating no longer exists.' });
+        throw err;
+      }
+      await ratings.deleteEntity(pk, id);
+      const totals = await addToSummary(summary, Number(row.stars), -1);
+      context.log(`Rating ${id} deleted by ${JSON.parse(Buffer.from(request.headers.get('x-ms-client-principal'), 'base64').toString('utf8')).userDetails || 'admin'}`);
+      return json(200, { ok: true, ...summarize(totals) });
+    } catch (err) {
+      context.error('Rating admin failed', err);
+      return json(500, { ok: false, error: 'Something went wrong. Please try again.' });
     }
   },
 });
