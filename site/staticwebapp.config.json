@@ -53,7 +53,7 @@
       ]
     },
     {
-      "route": "/api/admin/*",
+      "route": "/api/clients/admin",
       "allowedRoles": [
         "authenticated"
       ]

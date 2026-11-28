@@ -135,7 +135,7 @@
     const day = iso => new Date(iso).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
     const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); };
     const accessText = a => [a.portal && 'Portal', a.readiness && 'Readiness', a.admin && 'Admin'].filter(Boolean).join(' · ');
-    const API = '/api/admin/clients';
+    const API = '/api/clients/admin';
 
     async function post(body) {
       const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });

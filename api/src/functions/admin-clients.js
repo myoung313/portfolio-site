@@ -6,16 +6,17 @@ const { getTable } = require('../lib/access-store');
 const { validateInvite, newCode, hashCode, inviteState, memberKey, normEmail } = require('../lib/invites');
 
 // Admin portal: client invites and who has access.
-//   GET  /api/admin/clients                                    members, invites, and the emails from Azure settings
-//   POST /api/admin/clients {action:"invite", email, portal, readiness, days}  -> { path }
-//   POST /api/admin/clients {action:"cancel", id}              cancel a pending invite
-//   POST /api/admin/clients {action:"remove", email}           remove a member added by invite
+// (Not under /api/admin: Azure Functions reserves routes starting with "admin" for its own host API.)
+//   GET  /api/clients/admin                                    members, invites, and the emails from Azure settings
+//   POST /api/clients/admin {action:"invite", email, portal, readiness, days}  -> { path }
+//   POST /api/clients/admin {action:"cancel", id}              cancel a pending invite
+//   POST /api/clients/admin {action:"remove", email}           remove a member added by invite
 // staticwebapp.config.json requires sign-in; ADMIN_EMAILS (or the "admin" role) decides who gets in.
 const json = (status, body) => ({ status, jsonBody: body, headers: { 'Cache-Control': 'no-store' } });
 app.http('admin-clients', {
   methods: ['GET', 'POST'],
   authLevel: 'anonymous',
-  route: 'admin/clients',
+  route: 'clients/admin',
   handler: async (request, context) => {
     const me = parsePrincipal(request.headers.get('x-ms-client-principal'));
     if (!me) return json(401, { ok: false, error: 'Please sign in.' });
