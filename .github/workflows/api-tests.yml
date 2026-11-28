@@ -3,10 +3,10 @@ name: API tests
 # Runs on pull requests and feature branches (never deploys anything).
 on:
   pull_request:
-    paths: ["api/**", "site/password/**", ".github/workflows/api-tests.yml"]
+    paths: ["api/**", "content/**", "site/password/**", "site/guides/**", ".github/workflows/api-tests.yml"]
   push:
     branches-ignore: [main]
-    paths: ["api/**", "site/password/**", ".github/workflows/api-tests.yml"]
+    paths: ["api/**", "content/**", "site/password/**", "site/guides/**", ".github/workflows/api-tests.yml"]
   workflow_dispatch:
 
 permissions:
@@ -28,6 +28,8 @@ jobs:
       - run: npm ci
       - name: Unit tests
         run: npm test
+      - name: Guide pages and Ask Shift knowledge base are up to date
+        run: node scripts/build-guides.js --check
       - name: Live email checkup against real domains
         run: node scripts/smoke.js microsoft.com cloudshiftlabs.net google.com github.com example.com
       - name: Password check can reach Have I Been Pwned from a browser

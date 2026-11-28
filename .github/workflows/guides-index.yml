@@ -1,0 +1,36 @@
+name: Ask Shift search index
+
+# When guides change on main, upload them to Azure AI Search so Ask Shift can find them.
+# Needs two repository secrets (Settings > Secrets and variables > Actions):
+#   AI_SEARCH_ENDPOINT   https://<name>.search.windows.net
+#   AI_SEARCH_ADMIN_KEY  Search service > Settings > Keys > Primary admin key
+# Without them the job just skips, and the site uses its built-in search.
+on:
+  push:
+    branches: [main]
+    paths: ["api/src/data/guide-chunks.json", "api/scripts/ask-index.js", ".github/workflows/guides-index.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guides-index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Upload guide sections to Azure AI Search
+        env:
+          AI_SEARCH_ENDPOINT: ${{ secrets.AI_SEARCH_ENDPOINT }}
+          AI_SEARCH_ADMIN_KEY: ${{ secrets.AI_SEARCH_ADMIN_KEY }}
+        run: node scripts/ask-index.js
