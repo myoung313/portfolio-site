@@ -119,6 +119,12 @@
     .contact .alt-email { font-size:.9rem; margin:22px auto 0; }
     @media (max-width:600px) { .cform { grid-template-columns:1fr; } }
 
+    /* Free tools row */
+    .tools { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:14px; margin-top:18px; }
+    .tools a { display:block; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; color:var(--text); transition:transform .15s, border-color .15s; }
+    .tools a:hover { transform:translateY(-3px); border-color:var(--gold); }
+    .tools b { display:block; margin-bottom:4px; }
+    .tools span { color:var(--muted); font-size:.92rem; }
     /* Email checkup promo */
     .checkup { display:grid; grid-template-columns:1.1fr 1fr; gap:36px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:40px; }
     .checkup h2 { font-size:2rem; margin:8px 0 12px; }
@@ -301,7 +307,13 @@
           <h2>🎣 Phish or Legit?</h2>
           <p>Can you spot a phishing email in 15 seconds? Eight real-world style emails, one shot each. See how your team would do.</p>
           <a class="btn" href="/phish/">Play now</a>
+          <a href="/phish/#leaderboard" style="margin-left:14px;font-weight:600">🏆 Leaderboard</a>
         </div>
+      </div>
+      <div class="tools">
+        <a href="/password/"><b>🔑 Password breach check</b><span>Has your password already leaked? Checks safely without sending it.</span></a>
+        <a href="/securescore/"><b>📊 Secure Score quiz</b><span>Estimate your Microsoft 365 Secure Score in 2 minutes.</span></a>
+        <a href="/checkup/"><b>✉ Email checkup</b><span>Grade your SPF, DKIM and DMARC setup instantly.</span></a>
       </div>
     </div>
   </section>
