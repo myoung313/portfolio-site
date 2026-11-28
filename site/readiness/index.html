@@ -102,6 +102,8 @@
     .pkg .btn { text-align:center; }
     .quote-note { text-align:center; color:var(--muted); font-size:.9rem; margin-top:18px; }
 
+    .soon { display:inline-block; margin:0 0 18px; padding:10px 14px; border:1px solid var(--gold, #F5B700); border-radius:10px; background:rgba(245,183,0,.12); font-size:.95rem; }
+    html, body { overflow-x:clip; }
     /* Request form */
     .reqbox { background:linear-gradient(135deg, #2A3558, #1B2440); border:1px solid var(--line); border-radius:22px; padding:44px 28px; }
     .rform { max-width:640px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -158,7 +160,7 @@
     <div class="links">
       <a href="/#services" class="hide-sm">Services</a>
       <a href="/checkup/" class="hide-sm">✉ Email checkup</a>
-      <a href="#request">Request</a>
+      <a href="#request">Waitlist</a>
     </div>
   </nav>
 
@@ -168,8 +170,9 @@
         <div class="eyebrow">Cyber insurance readiness</div>
         <h1>Know your answers <em>before</em> your insurer asks.</h1>
         <p class="lead">Cyber insurance applications ask hard questions about MFA, backups, EDR and email security. One wrong answer can mean a higher premium, an exclusion, or a flat decline. Find out where you stand, and get a step-by-step plan to fix the gaps.</p>
+        <p class="soon"><b>Opening soon.</b> Paid assessments aren't open yet. Join the waitlist and I'll email you as soon as they are. No payment, no obligation.</p>
         <div class="cta">
-          <a href="#request" class="btn">Request your assessment</a>
+          <a href="#request" class="btn">Join the waitlist</a>
           <a href="#how" class="btn ghost">How it works</a>
         </div>
         <div class="stat-row">
@@ -223,8 +226,8 @@
         <h2>From request to report in four steps</h2>
       </div>
       <div class="flow">
-        <div><h3>Request</h3><p>Tell me a little about your business below. No payment yet.</p></div>
-        <div><h3>Get a quote</h3><p>I reply within one business day with a quote and a secure payment link.</p></div>
+        <div><h3>Join the waitlist</h3><p>Tell me a little about your business below. No payment and no obligation.</p></div>
+        <div><h3>Get a quote</h3><p>When assessments open, I email you a quote, a short service agreement and a secure payment link.</p></div>
         <div><h3>Answer the questions</h3><p>You get a private login to the client portal. Answer at your own pace; it saves as you go.</p></div>
         <div><h3>Get your report</h3><p>A readiness score, the must-haves you're missing, and a fix plan you can print or save as a PDF.</p></div>
       </div>
@@ -247,7 +250,7 @@
             <li>Prioritized fix plan</li>
             <li>Automatic email security check</li>
           </ul>
-          <a href="#request" class="btn ghost" data-pick="score">Request this</a>
+          <a href="#request" class="btn ghost" data-pick="score">Join waitlist</a>
         </div>
         <div class="pkg pop">
           <span class="badge">Most popular</span>
@@ -256,10 +259,10 @@
           <ul>
             <li>Everything in Readiness score</li>
             <li class="plus">30-minute video call to go through your report</li>
-            <li class="plus">Help wording your insurer's questions</li>
+            <li class="plus">Plain-English explanations of the security questions insurers ask</li>
             <li class="plus">Your top three fixes, explained step by step</li>
           </ul>
-          <a href="#request" class="btn" data-pick="review">Request this</a>
+          <a href="#request" class="btn" data-pick="review">Join waitlist</a>
         </div>
         <div class="pkg">
           <h3>Renewal sprint</h3>
@@ -268,9 +271,9 @@
             <li>Everything in Score + review call</li>
             <li class="plus">Hands-on review of your Microsoft 365 settings</li>
             <li class="plus">Evidence pack: screenshots and exports insurers ask for</li>
-            <li class="plus">Help filling in the application itself</li>
+            <li class="plus">Evidence mapped to each security question, ready for you or your agent</li>
           </ul>
-          <a href="#request" class="btn ghost" data-pick="sprint">Request this</a>
+          <a href="#request" class="btn ghost" data-pick="sprint">Join waitlist</a>
         </div>
       </div>
       <p class="quote-note">Not sure which one? Pick "Help me choose" in the form and I'll recommend one.</p>
@@ -279,9 +282,9 @@
     <section id="request">
       <div class="reqbox">
         <div class="head" style="margin-bottom:26px">
-          <div class="eyebrow">Request your assessment</div>
-          <h2>Get a quote</h2>
-          <p>No payment now. I'll email you a quote and next steps within one business day.</p>
+          <div class="eyebrow">Opening soon</div>
+          <h2>Join the waitlist</h2>
+          <p>No payment and no obligation. I'll email you when assessments open, with a quote for the option you pick.</p>
         </div>
         <form class="rform" id="rform" novalidate>
           <div><label for="r-name">Your name</label><input id="r-name" name="name" autocomplete="name" maxlength="100" required /><div class="err" id="e-name"></div></div>
@@ -301,13 +304,13 @@
           <div class="full"><label for="r-notes">Anything I should know? <span style="opacity:.7">(optional)</span></label><textarea id="r-notes" name="notes" maxlength="1500" placeholder="For example: our insurer sent a questionnaire, we use Microsoft 365 Business Standard, renewal is in March."></textarea><div class="err" id="e-notes"></div></div>
           <div class="hp" aria-hidden="true"><label for="r-web">Website</label><input id="r-web" name="website" tabindex="-1" autocomplete="off" /></div>
           <p class="legal full">Please don't include passwords or policy numbers. By sending, you agree that I can use these details to reply to you, as described in the <a href="/privacy/">Privacy Policy</a>.</p>
-          <div class="full"><button class="btn" type="submit" id="r-btn">Request my quote</button></div>
+          <div class="full"><button class="btn" type="submit" id="r-btn">Join the waitlist</button></div>
           <div class="rstatus full" id="r-status" role="status"></div>
         </form>
         <div class="sent" id="sent">
           <div class="plane" aria-hidden="true">📨</div>
-          <h3>Request received</h3>
-          <p>Thanks! I'll email you a quote and a secure payment link within one business day. After that, you'll get an invitation to your private portal to start the assessment.</p>
+          <h3>You're on the list</h3>
+          <p>Thanks! I'll email you as soon as assessments open, with a quote for the option you picked. Nothing to pay until then, and you can ask to be removed any time.</p>
         </div>
       </div>
     </section>
@@ -315,8 +318,9 @@
     <section id="faq">
       <div class="head"><div class="eyebrow">Questions</div><h2>Good to know</h2></div>
       <div class="faq">
-        <details><summary>Is this insurance advice, or a guarantee I'll get covered?</summary><p>No. It's a security readiness review that shows how your current setup lines up with what insurers commonly ask. Every insurer decides coverage and pricing on its own. I'm not an insurance agent and don't sell insurance.</p></details>
+        <details><summary>Is this insurance advice, or a guarantee I'll get covered?</summary><p>No. It's a security readiness review that shows how your current setup lines up with what insurers commonly ask. Every insurer decides coverage and pricing on its own. I'm not a licensed insurance agent, I don't sell or recommend insurance policies, and I don't take commissions from insurers. For questions about your policy or coverage, talk to a licensed insurance agent.</p></details>
         <details><summary>Do I need to be technical to answer?</summary><p>No. Each question is in plain English with a short explanation. If you don't know, pick "I'm not sure". Those go on a find-out list, and on the review call I can help you check.</p></details>
+        <details><summary>When can I start?</summary><p>Paid assessments open soon. Everyone on the waitlist hears first, in the order they joined.</p></details>
         <details><summary>How do I pay?</summary><p>After I send your quote, you pay through a secure Stripe payment link. I never see or store your card details.</p></details>
         <details><summary>What do you do with my answers?</summary><p>They're stored privately in Microsoft Azure, used only to make your report and to help you, and deleted on request. See the <a href="/privacy/">Privacy Policy</a>.</p></details>
         <details><summary>Can you fix the gaps too?</summary><p>Yes. Most fixes are Microsoft 365, Entra ID, Intune and Defender work, which is exactly what I do. Your report shows which items I can take off your plate.</p></details>
@@ -386,7 +390,7 @@
         status.textContent = 'Could not send. Please check your connection, or email support@cloudshiftlabs.net.';
         status.classList.add('bad');
       }
-      btn.disabled = false; btn.textContent = 'Request my quote';
+      btn.disabled = false; btn.textContent = 'Join the waitlist';
     });
   })();
   </script>
