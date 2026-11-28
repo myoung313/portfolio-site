@@ -17,3 +17,9 @@ test('too fast is spam', () => assert.ok(checkRating({ ...good, startedAt: now -
 test('links in comment are spam', () => assert.ok(checkRating({ ...good, comment: 'http://a www.b' }, now).spam));
 test('summary of nothing', () => assert.deepStrictEqual(summarize(null), { count: 0, average: null, distribution: [0, 0, 0, 0, 0] }));
 test('summary average', () => assert.deepStrictEqual(summarize({ s1: 0, s2: 0, s3: 1, s4: 1, s5: 2 }), { count: 4, average: 4.3, distribution: [0, 0, 1, 1, 2] }));
+
+test('admin view hides the IP hash and fills defaults', () => {
+  const { adminRatingView } = require('../src/lib/rating');
+  const v = adminRatingView({ partitionKey: '2026-11', rowKey: 'r1', stars: 4, comment: '', ipHash: 'abc', userAgent: 'x', submittedAt: '2026-11-28T01:00:00Z' });
+  assert.deepStrictEqual(v, { pk: '2026-11', id: 'r1', stars: 4, comment: '', page: '/', at: '2026-11-28T01:00:00Z' });
+});

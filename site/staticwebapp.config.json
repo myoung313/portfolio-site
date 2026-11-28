@@ -41,6 +41,12 @@
       ]
     },
     {
+      "route": "/api/ratings/admin",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
       "route": "/api/admin/*",
       "allowedRoles": [
         "authenticated"
