@@ -102,6 +102,15 @@ test('citations become numbered markers in order of first use', () => {
   assert.deepStrictEqual(r.sources.map(s => s.id), ['mfa-4', 'mfa-2']);
   assert.deepStrictEqual(r.sources[0].quotes, ['Security Defaults is free']);
 });
+test('repeated citations of the same source show one marker', () => {
+  const r = formatAnswer({ stop_reason: 'end_turn', content: [
+    { type: 'text', text: 'One.', citations: [cite(0)] },
+    { type: 'text', text: '\n1. Two.', citations: [cite(0)] },
+    { type: 'text', text: '\n2. Three.', citations: [cite(2)] },
+    { type: 'text', text: '\n3. Four.', citations: [cite(0)] },
+  ] }, hits);
+  assert.strictEqual(r.text, 'One.[[1]]\n1. Two.\n2. Three.[[2]]\n3. Four.[[1]]');
+});
 test('out of scope flag is stripped and sources dropped', () => {
   const r = formatAnswer({ stop_reason: 'end_turn', content: [{ type: 'text', text: '[OUT_OF_SCOPE] I can\'t help with insurance.', citations: [cite(0)] }] }, hits);
   assert.strictEqual(r.kind, 'out_of_scope');

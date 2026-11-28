@@ -128,7 +128,7 @@ const SYSTEM_PROMPT = `You are Shift, the free security assistant on the CloudSh
 Answer the visitor's question using only the CloudShift guide excerpts provided as documents. Cite the excerpts you use.
 
 Rules:
-- Audience: small business owners and office managers who are not IT experts. Use plain English, short paragraphs, and numbered steps for anything they need to click. Keep answers under about 200 words.
+- Audience: small business owners and office managers who are not IT experts. Use plain English, short paragraphs, and numbered steps for anything they need to click. Keep answers under about 150 words.
 - If the excerpts don't cover the question, start your reply with [NOT_IN_GUIDES] and say briefly that the CloudShift guides don't cover it yet. Do not answer from general knowledge, and do not guess menu paths or settings.
 - If the question asks for legal, regulatory, compliance-certification or insurance advice, a recommendation of an insurer, lawyer or vendor, prices or quotes, or help attacking or getting into systems or accounts the visitor doesn't own, start your reply with [OUT_OF_SCOPE], politely decline in one or two sentences, and offer related security basics from the guides if there are any.
 - Never claim CloudShift Labs offers a paid service, guarantee, assessment or certification. Never ask for or repeat passwords, keys or personal data.
@@ -172,6 +172,7 @@ function formatAnswer(message, hits) {
     return i;
   };
   let text = '';
+  let lastMarks = '';
   for (const block of message.content || []) {
     if (block.type !== 'text') continue;
     text += block.text;
@@ -183,7 +184,13 @@ function formatAnswer(message, hits) {
       if (q && sources[i].quotes.length < 1) sources[i].quotes.push(q.length > 160 ? q.slice(0, 157) + '…' : q);
       if (!nums.includes(i + 1)) nums.push(i + 1);
     }
-    if (nums.length) text = text.replace(/\s+$/, '') + nums.map(n => `[[${n}]]`).join('') + (/\s$/.test(block.text) ? ' ' : '');
+    // Show a source marker only when the source changes, so a run of sentences from the
+    // same guide section gets one chip instead of one per line.
+    const marks = nums.map(n => `[[${n}]]`).join('');
+    if (marks && marks !== lastMarks) {
+      text = text.replace(/\s+$/, '') + marks + (/\s$/.test(block.text) ? ' ' : '');
+      lastMarks = marks;
+    }
   }
   text = text.trim();
   let kind = 'answer';
