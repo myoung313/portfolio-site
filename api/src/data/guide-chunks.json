@@ -1,0 +1,410 @@
+[
+ {
+  "id": "admin-accounts-1",
+  "slug": "admin-accounts",
+  "title": "Protect your admin accounts",
+  "heading": "Keep admins to a minimum",
+  "url": "/guides/admin-accounts/#keep-admins-to-a-minimum",
+  "content": "Global Administrator can change anything in your tenant, so every extra admin is extra risk. Aim for two to four Global Administrators. Give people narrower roles where possible, such as User Administrator, Exchange Administrator or Billing Administrator."
+ },
+ {
+  "id": "admin-accounts-2",
+  "slug": "admin-accounts",
+  "title": "Protect your admin accounts",
+  "heading": "Use a separate admin account",
+  "url": "/guides/admin-accounts/#use-a-separate-admin-account",
+  "content": "Admins should do daily email and web browsing with a normal account and sign in with a separate admin account (for example admin-jane@yourdomain.com) only for admin work. Admin accounts don't need a mailbox license. That way a phishing email that tricks you during the day can't hand over admin rights."
+ },
+ {
+  "id": "admin-accounts-3",
+  "slug": "admin-accounts",
+  "title": "Protect your admin accounts",
+  "heading": "Emergency access account",
+  "url": "/guides/admin-accounts/#emergency-access-account",
+  "content": "Keep one cloud-only emergency access (break-glass) account with Global Administrator, a long random password stored offline, and strong MFA such as a FIDO2 security key. Exclude it from Conditional Access policies that could lock you out, and check its sign-ins regularly."
+ },
+ {
+  "id": "admin-accounts-4",
+  "slug": "admin-accounts",
+  "title": "Protect your admin accounts",
+  "heading": "Review regularly",
+  "url": "/guides/admin-accounts/#review-regularly",
+  "content": "Every few months, review who holds admin roles in the Microsoft 365 admin center under Roles, Role assignments, and remove anyone who no longer needs them, including former staff and outside IT providers."
+ },
+ {
+  "id": "backups-1",
+  "slug": "backups",
+  "title": "Backups that actually save you from ransomware",
+  "heading": "Is Microsoft 365 already backed up?",
+  "url": "/guides/backups/#is-microsoft-365-already-backed-up",
+  "content": "Microsoft keeps your data available and protects it from hardware failures, and deleted items can be recovered for a limited time (often 14 to 93 days depending on the item). That is not the same as a backup you control. If an attacker or a mistake deletes or encrypts data and nobody notices in time, it can be gone. Microsoft 365 Backup and third-party backup tools fill that gap."
+ },
+ {
+  "id": "backups-2",
+  "slug": "backups",
+  "title": "Backups that actually save you from ransomware",
+  "heading": "The 3-2-1 rule",
+  "url": "/guides/backups/#the-3-2-1-rule",
+  "content": "Keep 3 copies of important data, on 2 different types of storage, with 1 copy offsite or offline. A modern twist is 3-2-1-1-0: one copy immutable (can't be changed or deleted, even by an admin) and zero errors when you test restores."
+ },
+ {
+  "id": "backups-3",
+  "slug": "backups",
+  "title": "Backups that actually save you from ransomware",
+  "heading": "Protect the backups themselves",
+  "url": "/guides/backups/#protect-the-backups-themselves",
+  "content": "Ransomware groups look for backups and delete them first. Use separate credentials with MFA for your backup system, turn on immutability or soft-delete if the product supports it, and don't leave backup drives permanently plugged into the computer they protect."
+ },
+ {
+  "id": "backups-4",
+  "slug": "backups",
+  "title": "Backups that actually save you from ransomware",
+  "heading": "Test your restores",
+  "url": "/guides/backups/#test-your-restores",
+  "content": "A backup you have never restored from is a guess. A few times a year, restore a real file and a full mailbox or folder and time how long it takes. Write the steps down so someone else could do it during a stressful day."
+ },
+ {
+  "id": "business-email-1",
+  "slug": "business-email",
+  "title": "Is free Gmail or Outlook.com okay for a business?",
+  "heading": "The problems with free personal email",
+  "url": "/guides/business-email/#the-problems-with-free-personal-email",
+  "content": "A free personal address like yourbusiness@gmail.com looks less trustworthy to customers, is easy for scammers to imitate, and belongs to one person rather than the company. You also can't set SPF, DKIM and DMARC for a domain you don't own, and you have fewer admin controls, no central account recovery, and no clean way to hand over access when someone leaves."
+ },
+ {
+  "id": "business-email-2",
+  "slug": "business-email",
+  "title": "Is free Gmail or Outlook.com okay for a business?",
+  "heading": "What a business plan adds",
+  "url": "/guides/business-email/#what-a-business-plan-adds",
+  "content": "A plan like Microsoft 365 Business Basic, Standard or Premium, or Google Workspace, gives you email at your own domain, admin control over every account, MFA enforcement, retention and recovery options, and email authentication. It also keeps business data in business accounts."
+ },
+ {
+  "id": "business-email-3",
+  "slug": "business-email",
+  "title": "Is free Gmail or Outlook.com okay for a business?",
+  "heading": "Making the move",
+  "url": "/guides/business-email/#making-the-move",
+  "content": "Buy a domain if you don't have one, choose a business email plan, set up MFA from day one, and add SPF, DKIM and DMARC records. Keep the old free address forwarding to the new one for a few months and update your website, invoices and signatures."
+ },
+ {
+  "id": "conditional-access-1",
+  "slug": "conditional-access",
+  "title": "Conditional Access for small teams",
+  "heading": "What Conditional Access does",
+  "url": "/guides/conditional-access/#what-conditional-access-does",
+  "content": "Conditional Access is an if-this-then-that rule engine for sign-ins in Microsoft Entra ID. For example: if someone signs in to Microsoft 365, then require MFA; if a sign-in comes from a country you never work in, then block it. It needs Entra ID P1, which is included in Microsoft 365 Business Premium."
+ },
+ {
+  "id": "conditional-access-2",
+  "slug": "conditional-access",
+  "title": "Conditional Access for small teams",
+  "heading": "When it's worth it",
+  "url": "/guides/conditional-access/#when-it-s-worth-it",
+  "content": "Security Defaults is enough for many small businesses. Conditional Access is worth it when you need exceptions (a shared front-desk PC), want to block legacy sign-ins while allowing a specific app, or want to require company-managed devices. It takes more care, because a bad policy can lock everyone out."
+ },
+ {
+  "id": "conditional-access-3",
+  "slug": "conditional-access",
+  "title": "Conditional Access for small teams",
+  "heading": "Three starter policies",
+  "url": "/guides/conditional-access/#three-starter-policies",
+  "content": "Microsoft offers ready-made templates under Entra ID, Conditional Access, Create new policy from templates. Good starting points are:\n1. Require multifactor authentication for all users.\n2. Require multifactor authentication for admins.\n3. Block legacy authentication.\nCreate each one in Report-only mode first, watch the sign-in logs for a week, then switch it On."
+ },
+ {
+  "id": "conditional-access-4",
+  "slug": "conditional-access",
+  "title": "Conditional Access for small teams",
+  "heading": "Don't lock yourself out",
+  "url": "/guides/conditional-access/#don-t-lock-yourself-out",
+  "content": "Keep one emergency access (break-glass) admin account excluded from your policies, with a long random password stored safely offline. Turn Security Defaults off only right before you switch your policies On, because the two can't be used together."
+ },
+ {
+  "id": "devices-1",
+  "slug": "devices",
+  "title": "Keep laptops and phones patched and protected",
+  "heading": "Turn on automatic updates",
+  "url": "/guides/devices/#turn-on-automatic-updates",
+  "content": "Most attacks use security holes that already have a fix. Turn on automatic updates for Windows, macOS, phones, browsers and Microsoft 365 apps, and restart regularly so updates actually install. Replace devices that no longer get security updates, such as PCs that can't run a supported version of Windows."
+ },
+ {
+  "id": "devices-2",
+  "slug": "devices",
+  "title": "Keep laptops and phones patched and protected",
+  "heading": "Encrypt disks",
+  "url": "/guides/devices/#encrypt-disks",
+  "content": "Turn on BitLocker on Windows or FileVault on Mac so a lost or stolen laptop doesn't leak data. With Intune, the recovery keys can be stored in Entra ID automatically."
+ },
+ {
+  "id": "devices-3",
+  "slug": "devices",
+  "title": "Keep laptops and phones patched and protected",
+  "heading": "Antivirus and firewall",
+  "url": "/guides/devices/#antivirus-and-firewall",
+  "content": "Microsoft Defender Antivirus is built into Windows and is a good baseline. Microsoft 365 Business Premium adds Defender for Business, which can detect and respond to attacks across all your devices from one console."
+ },
+ {
+  "id": "devices-4",
+  "slug": "devices",
+  "title": "Keep laptops and phones patched and protected",
+  "heading": "Manage devices centrally",
+  "url": "/guides/devices/#manage-devices-centrally",
+  "content": "Microsoft Intune, included in Business Premium, lets you enforce updates, encryption and screen locks, and wipe company data from a lost phone. If you can't afford it yet, keep a simple list of every device, who uses it, and whether updates and encryption are on."
+ },
+ {
+  "id": "email-authentication-1",
+  "slug": "email-authentication",
+  "title": "SPF, DKIM and DMARC in plain English",
+  "heading": "Why these records matter",
+  "url": "/guides/email-authentication/#why-these-records-matter",
+  "content": "Anyone can send an email that claims to be from your domain. SPF, DKIM and DMARC are DNS records that let receiving mail servers check whether an email really came from you. Without them, scammers can impersonate your business to your customers, and your real emails are more likely to land in spam. Google and Yahoo now require them for bulk senders."
+ },
+ {
+  "id": "email-authentication-2",
+  "slug": "email-authentication",
+  "title": "SPF, DKIM and DMARC in plain English",
+  "heading": "SPF",
+  "url": "/guides/email-authentication/#spf",
+  "content": "SPF (Sender Policy Framework) is a TXT record that lists which services may send email for your domain. For Microsoft 365 it usually looks like v=spf1 include:spf.protection.outlook.com -all. Add an include for every other service that sends as you, such as a newsletter tool. Only one SPF record is allowed per domain."
+ },
+ {
+  "id": "email-authentication-3",
+  "slug": "email-authentication",
+  "title": "SPF, DKIM and DMARC in plain English",
+  "heading": "DKIM",
+  "url": "/guides/email-authentication/#dkim",
+  "content": "DKIM adds a digital signature to each email so receivers can tell it wasn't changed and really came from your domain. In Microsoft 365 you turn it on in the Microsoft Defender portal under Email and collaboration, Policies and rules, Threat policies, Email authentication settings, DKIM. Microsoft gives you two CNAME records to add at your DNS host, then you select Enable."
+ },
+ {
+  "id": "email-authentication-4",
+  "slug": "email-authentication",
+  "title": "SPF, DKIM and DMARC in plain English",
+  "heading": "DMARC",
+  "url": "/guides/email-authentication/#dmarc",
+  "content": "DMARC tells receivers what to do when an email fails SPF and DKIM checks, and sends you reports. Start with a TXT record at _dmarc.yourdomain.com such as v=DMARC1; p=none; rua=mailto:you@yourdomain.com to watch reports. Once all your real email passes, move to p=quarantine, then p=reject, which tells receivers to refuse fakes."
+ },
+ {
+  "id": "email-authentication-5",
+  "slug": "email-authentication",
+  "title": "SPF, DKIM and DMARC in plain English",
+  "heading": "Check your setup",
+  "url": "/guides/email-authentication/#check-your-setup",
+  "content": "The free CloudShift Labs Email checkup at cloudshiftlabs.net/checkup grades your SPF, DKIM and DMARC records and shows what to fix."
+ },
+ {
+  "id": "inbox-rules-1",
+  "slug": "inbox-rules",
+  "title": "Find suspicious inbox rules and forwarding",
+  "heading": "Why attackers create inbox rules",
+  "url": "/guides/inbox-rules/#why-attackers-create-inbox-rules",
+  "content": "After breaking into a mailbox, attackers often add a rule that forwards copies of email outside the company or moves replies to an obscure folder, so they can keep watching and hide their tracks even after the password is changed."
+ },
+ {
+  "id": "inbox-rules-2",
+  "slug": "inbox-rules",
+  "title": "Find suspicious inbox rules and forwarding",
+  "heading": "Check one mailbox",
+  "url": "/guides/inbox-rules/#check-one-mailbox",
+  "content": "In Outlook on the web, open Settings, Mail, Rules, and look for rules you don't recognize, especially ones that forward, redirect, delete, or move mail to folders like RSS Feeds or Archive. Also check Settings, Mail, Forwarding."
+ },
+ {
+  "id": "inbox-rules-3",
+  "slug": "inbox-rules",
+  "title": "Find suspicious inbox rules and forwarding",
+  "heading": "Block forwarding to outside addresses",
+  "url": "/guides/inbox-rules/#block-forwarding-to-outside-addresses",
+  "content": "Microsoft 365 blocks automatic forwarding to external addresses by default through the outbound spam filter policy. Confirm it in the Microsoft Defender portal under Email and collaboration, Policies and rules, Threat policies, Anti-spam, Anti-spam outbound policy, where Automatic forwarding rules should be set to Automatic (system-controlled) or Off."
+ },
+ {
+  "id": "inbox-rules-4",
+  "slug": "inbox-rules",
+  "title": "Find suspicious inbox rules and forwarding",
+  "heading": "Alerts",
+  "url": "/guides/inbox-rules/#alerts",
+  "content": "Microsoft Defender raises alerts for suspicious forwarding and inbox rule activity. Make sure an admin actually receives and reads alert emails, which you can set up under Settings, Email notifications in the Defender portal."
+ },
+ {
+  "id": "mfa-rollout-1",
+  "slug": "mfa-rollout",
+  "title": "Rolling out MFA without angry staff",
+  "heading": "Tell people before you flip the switch",
+  "url": "/guides/mfa-rollout/#tell-people-before-you-flip-the-switch",
+  "content": "Send a short heads-up a day or two before MFA starts: what is changing, why (stolen passwords are the number one way small businesses get hacked), what they need (their phone and five minutes), and who to ask for help. People push back less when it is not a surprise."
+ },
+ {
+  "id": "mfa-rollout-2",
+  "slug": "mfa-rollout",
+  "title": "Rolling out MFA without angry staff",
+  "heading": "Registration",
+  "url": "/guides/mfa-rollout/#registration",
+  "content": "At their next sign-in, users are prompted to install Microsoft Authenticator and scan a QR code. With Security Defaults they have 14 days before registration becomes required. Encourage everyone to finish on day one so they are not stuck later. Users can review their methods at mysignins.microsoft.com under Security info."
+ },
+ {
+  "id": "mfa-rollout-3",
+  "slug": "mfa-rollout",
+  "title": "Rolling out MFA without angry staff",
+  "heading": "Lost or replaced phones",
+  "url": "/guides/mfa-rollout/#lost-or-replaced-phones",
+  "content": "Plan for this before it happens. An admin can require the user to register MFA again from the Entra admin center by opening the user, choosing Authentication methods, and selecting Require re-register multifactor authentication. Ask users to add a second method, such as a phone number, as a backup. Verify the person's identity by phone or in person before resetting anything, because attackers also call help desks pretending to be employees."
+ },
+ {
+  "id": "mfa-rollout-4",
+  "slug": "mfa-rollout",
+  "title": "Rolling out MFA without angry staff",
+  "heading": "Shared mailboxes and service accounts",
+  "url": "/guides/mfa-rollout/#shared-mailboxes-and-service-accounts",
+  "content": "Shared mailboxes in Microsoft 365 don't need their own sign-in, so users open them with their own MFA-protected account. Don't share one login between several people. If a device or app truly can't do MFA, talk to someone who can review the risk before making exceptions."
+ },
+ {
+  "id": "mfa-1",
+  "slug": "mfa",
+  "title": "Turn on MFA for your whole team in 10 minutes",
+  "heading": "Why MFA matters",
+  "url": "/guides/mfa/#why-mfa-matters",
+  "content": "Most Microsoft 365 break-ins start with a stolen or guessed password. Multi-factor authentication (MFA) asks for a second proof, usually a tap in the Microsoft Authenticator app, so a stolen password alone is not enough. Microsoft reports that MFA blocks the vast majority of automated account attacks. If you only do one security task this year, make it this one."
+ },
+ {
+  "id": "mfa-2",
+  "slug": "mfa",
+  "title": "Turn on MFA for your whole team in 10 minutes",
+  "heading": "Option 1: Security Defaults (free, every plan)",
+  "url": "/guides/mfa/#option-1-security-defaults-free-every-plan",
+  "content": "Security Defaults is a free switch that turns on MFA for every user, requires MFA for admins every time they sign in, and blocks old sign-in methods (legacy authentication) that can't do MFA. It is included with every Microsoft 365 plan, so it is the best starting point for most small businesses.\nTo turn it on:\n1. Sign in to entra.microsoft.com as a Global Administrator.\n2. In the left menu open Entra ID (called Identity in some tenants), then Overview, then the Properties tab.\n3. Select Manage security defaults.\n4. Set Security defaults to Enabled and select Save.\nTenants created after October 2019 often have Security Defaults on already. Check before you change anything."
+ },
+ {
+  "id": "mfa-3",
+  "slug": "mfa",
+  "title": "Turn on MFA for your whole team in 10 minutes",
+  "heading": "Option 2: Conditional Access (Business Premium)",
+  "url": "/guides/mfa/#option-2-conditional-access-business-premium",
+  "content": "If you have Microsoft 365 Business Premium or Entra ID P1, Conditional Access policies give finer control, such as skipping the prompt on a trusted office network or requiring a compliant device. You must turn Security Defaults off before you can use Conditional Access, so build and test your policies first. See the Conditional Access for small teams guide."
+ },
+ {
+  "id": "mfa-4",
+  "slug": "mfa",
+  "title": "Turn on MFA for your whole team in 10 minutes",
+  "heading": "What your users will see",
+  "url": "/guides/mfa/#what-your-users-will-see",
+  "content": "After MFA is turned on, each user is asked to register the Microsoft Authenticator app the next time they sign in. With Security Defaults they get 14 days to register before it becomes required. Tell your team a day ahead, share a short how-to, and keep a backup admin account so nobody gets locked out. The Rolling out MFA without angry staff guide has a message you can copy."
+ },
+ {
+  "id": "offboarding-1",
+  "slug": "offboarding",
+  "title": "Offboarding a departing employee in Microsoft 365",
+  "heading": "Same-day checklist",
+  "url": "/guides/offboarding/#same-day-checklist",
+  "content": "When someone leaves, do this the same day, ideally while they're in their exit meeting:\n1. Block sign-in for the account in the Microsoft 365 admin center (Users, Active users, select the user, Block sign-in).\n2. Sign them out of all sessions and reset the password.\n3. Remove their MFA methods and any admin roles.\n4. Wipe company data from their phone if you use Intune.\n5. Collect laptops, security keys and building access."
+ },
+ {
+  "id": "offboarding-2",
+  "slug": "offboarding",
+  "title": "Offboarding a departing employee in Microsoft 365",
+  "heading": "Keep the mailbox and files",
+  "url": "/guides/offboarding/#keep-the-mailbox-and-files",
+  "content": "Don't delete the account right away. Convert the mailbox to a shared mailbox so a manager can read incoming mail (shared mailboxes under 50 GB don't need a license), and give their manager access to the person's OneDrive files. Microsoft deletes OneDrive content after a retention period once the account is deleted, so move what you need first."
+ },
+ {
+  "id": "offboarding-3",
+  "slug": "offboarding",
+  "title": "Offboarding a departing employee in Microsoft 365",
+  "heading": "Shared passwords and outside apps",
+  "url": "/guides/offboarding/#shared-passwords-and-outside-apps",
+  "content": "Change any shared passwords the person knew, such as social media, banking portals and vendor sites, and remove them from outside apps that don't use Microsoft sign-in. A team password manager makes this much faster."
+ },
+ {
+  "id": "passwords-1",
+  "slug": "passwords",
+  "title": "Passwords and password managers for small teams",
+  "heading": "What a good password looks like now",
+  "url": "/guides/passwords/#what-a-good-password-looks-like-now",
+  "content": "Length beats complexity. A passphrase of four or more random words is stronger and easier to remember than a short jumble of symbols. Never reuse a work password anywhere else. Current NIST guidance says not to force regular password changes, and to change a password only when there's a sign it was exposed."
+ },
+ {
+  "id": "passwords-2",
+  "slug": "passwords",
+  "title": "Passwords and password managers for small teams",
+  "heading": "Use a team password manager",
+  "url": "/guides/passwords/#use-a-team-password-manager",
+  "content": "A password manager creates and stores a unique password for every site, fills it in automatically, and lets you share logins safely with coworkers instead of using spreadsheets or sticky notes. Choose one with business features: shared vaults, admin recovery, and MFA on the vault itself."
+ },
+ {
+  "id": "passwords-3",
+  "slug": "passwords",
+  "title": "Passwords and password managers for small teams",
+  "heading": "Check for leaked passwords",
+  "url": "/guides/passwords/#check-for-leaked-passwords",
+  "content": "Check whether a password already appears in known breaches with the free CloudShift Labs Password breach check at cloudshiftlabs.net/password. It checks safely and never sends your password. In Microsoft 365, Entra ID Password Protection blocks common weak passwords automatically."
+ },
+ {
+  "id": "passwords-4",
+  "slug": "passwords",
+  "title": "Passwords and password managers for small teams",
+  "heading": "Passwordless is the future",
+  "url": "/guides/passwords/#passwordless-is-the-future",
+  "content": "Passkeys and the Microsoft Authenticator app can replace passwords entirely for Microsoft 365 sign-ins. They can't be phished the way passwords can, so they are worth piloting once MFA is in place."
+ },
+ {
+  "id": "phishing-1",
+  "slug": "phishing",
+  "title": "How to spot a phishing email",
+  "heading": "The warning signs",
+  "url": "/guides/phishing/#the-warning-signs",
+  "content": "Most phishing emails share a few tells:\n- Urgency or fear: \"your account will be closed today\", \"invoice overdue\".\n- A sender name that looks right but an address that doesn't, like microsoft-support@outlook-verify.com.\n- Links whose real address (hover or long-press to see it) doesn't match the company.\n- Unexpected attachments, especially invoices, voicemails or shared documents you weren't expecting.\n- Requests to change bank details, buy gift cards, or sign in to \"verify\" your account."
+ },
+ {
+  "id": "phishing-2",
+  "slug": "phishing",
+  "title": "How to spot a phishing email",
+  "heading": "Business email compromise",
+  "url": "/guides/phishing/#business-email-compromise",
+  "content": "The costliest scams don't contain links at all. An attacker poses as your boss, a vendor or a client and asks for a payment or a change to bank details. Always confirm payment changes with a phone call to a number you already have, never one from the email."
+ },
+ {
+  "id": "phishing-3",
+  "slug": "phishing",
+  "title": "How to spot a phishing email",
+  "heading": "What to do if someone clicked",
+  "url": "/guides/phishing/#what-to-do-if-someone-clicked",
+  "content": "Act quickly and without blame, so people report mistakes fast:\n1. Change the user's password and sign them out of all sessions (Microsoft 365 admin center, Users, Active users, select the user).\n2. Check that MFA is on for that account.\n3. Look for new inbox rules that forward or delete mail, a common attacker trick (see the Suspicious inbox rules guide).\n4. Run an antivirus scan if a file was opened.\n5. Report the email with the Report button in Outlook so Microsoft's filters learn from it."
+ },
+ {
+  "id": "phishing-4",
+  "slug": "phishing",
+  "title": "How to spot a phishing email",
+  "heading": "Practice",
+  "url": "/guides/phishing/#practice",
+  "content": "Short, regular practice works better than a yearly training video. Try the free Phish or Legit? game at cloudshiftlabs.net/phish."
+ },
+ {
+  "id": "sharing-1",
+  "slug": "sharing",
+  "title": "Safer file sharing in OneDrive and SharePoint",
+  "heading": "Pick the right kind of link",
+  "url": "/guides/sharing/#pick-the-right-kind-of-link",
+  "content": "OneDrive and SharePoint offer three kinds of sharing link: Anyone (no sign-in needed, anyone with the link can open it), People in your organization, and Specific people. Use Specific people for anything sensitive. Anyone links are convenient but can be forwarded to anyone."
+ },
+ {
+  "id": "sharing-2",
+  "slug": "sharing",
+  "title": "Safer file sharing in OneDrive and SharePoint",
+  "heading": "Set safer defaults",
+  "url": "/guides/sharing/#set-safer-defaults",
+  "content": "In the SharePoint admin center under Policies, Sharing, you can change the default link type to Specific people, require Anyone links to expire after a set number of days, or turn Anyone links off completely. These settings apply to OneDrive too."
+ },
+ {
+  "id": "sharing-3",
+  "slug": "sharing",
+  "title": "Safer file sharing in OneDrive and SharePoint",
+  "heading": "Guests",
+  "url": "/guides/sharing/#guests",
+  "content": "Guests are outside people you invite to files, Teams or sites. Review guests every few months in the Microsoft 365 admin center under Users, Guest users, and remove ones you no longer work with."
+ },
+ {
+  "id": "sharing-4",
+  "slug": "sharing",
+  "title": "Safer file sharing in OneDrive and SharePoint",
+  "heading": "Find what's shared",
+  "url": "/guides/sharing/#find-what-s-shared",
+  "content": "Users can see what they've shared from OneDrive by opening Shared, then Shared by you. Remind your team to stop sharing files once a project ends."
+ }
+]
