@@ -3,10 +3,10 @@ name: API tests
 # Runs on pull requests and feature branches (never deploys anything).
 on:
   pull_request:
-    paths: ["api/**", ".github/workflows/api-tests.yml"]
+    paths: ["api/**", "site/password/**", ".github/workflows/api-tests.yml"]
   push:
     branches-ignore: [main]
-    paths: ["api/**", ".github/workflows/api-tests.yml"]
+    paths: ["api/**", "site/password/**", ".github/workflows/api-tests.yml"]
   workflow_dispatch:
 
 permissions:
@@ -30,3 +30,11 @@ jobs:
         run: npm test
       - name: Live email checkup against real domains
         run: node scripts/smoke.js microsoft.com cloudshiftlabs.net google.com github.com example.com
+      - name: Password check can reach Have I Been Pwned from a browser
+        # The password page calls this API straight from the visitor's browser, so it needs CORS.
+        # 5BAA6 is the hash prefix of "password", which is always in the breach list.
+        run: |
+          curl -sfi -H "Origin: https://cloudshiftlabs.net" https://api.pwnedpasswords.com/range/5BAA6 > hibp.txt
+          grep -qi "^access-control-allow-origin: \*" hibp.txt
+          grep -q "^1E4C9B93F3F0682250B6CF8331B7EE68FD8:" hibp.txt
+          echo "HIBP range API OK"

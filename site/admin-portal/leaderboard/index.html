@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
+  <title>Leaderboard Review | Admin | CloudShift Labs</title>
+  <style>
+    /* Same "lights on" palette as the client portal. */
+    :root {
+      --bg:#FBF8F1; --bg2:#F3EEE2; --card:#FFFFFF; --line:#E4DCC8;
+      --navy:#141C33; --text:#1E2540; --muted:#5E6680; --gold:#F5B700; --gold-d:#B98900;
+      --ok:#2E8B57; --bad:#C4382F; --hold:#C77700;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { background:var(--bg); }
+    body { font-family:"Segoe UI", system-ui, -apple-system, sans-serif; color:var(--text); line-height:1.55; min-height:100vh;
+      background:var(--bg) radial-gradient(ellipse 1100px 600px at 50% -10%, rgba(245,183,0,.22), transparent 70%) no-repeat; }
+    a { color:var(--gold-d); text-decoration:none; font-weight:600; }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:14px; max-width:900px; margin:0 auto; padding:16px 20px; }
+    .logo { font-weight:700; letter-spacing:.04em; color:var(--navy); }
+    .logo span { color:var(--gold-d); }
+    nav .r { display:flex; gap:16px; font-size:.9rem; }
+    nav .r a { color:var(--muted); font-weight:500; white-space:nowrap; }
+    .logo { white-space:nowrap; }
+    main { max-width:900px; margin:0 auto; padding:10px 20px 60px; }
+    .eyebrow { color:var(--gold-d); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem; }
+    h1 { font-size:clamp(1.7rem, 4.5vw, 2.3rem); line-height:1.2; margin:6px 0 6px; color:var(--navy); }
+    .lead { color:var(--muted); }
+
+    .tabs { display:flex; gap:6px; margin:24px 0 16px; border-bottom:1px solid var(--line); overflow-x:auto; }
+    .tabs button { background:none; border:0; font:inherit; font-weight:600; color:var(--muted); padding:10px 12px; border-bottom:3px solid transparent; cursor:pointer; white-space:nowrap; }
+    .tabs button.on { color:var(--navy); border-color:var(--gold); }
+    .tabs .n { display:inline-grid; place-items:center; min-width:22px; height:22px; border-radius:99px; background:var(--bg2); font-size:.75rem; margin-left:6px; padding:0 6px; }
+    .tabs button.on .n { background:var(--gold); color:var(--navy); }
+    .tabs .n.pop { animation:pop .35s ease; }
+    @keyframes pop { 50% { transform:scale(1.35); } }
+
+    .item { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:14px; position:relative;
+      box-shadow:0 1px 2px rgba(20,28,51,.04), 0 8px 24px rgba(20,28,51,.05); transition:transform .5s cubic-bezier(.5,-0.4,.7,1), opacity .5s; }
+    .item .meta { display:flex; flex-wrap:wrap; gap:4px 12px; align-items:baseline; font-size:.85rem; color:var(--muted); }
+    .item .meta b { color:var(--navy); font-size:.98rem; }
+    .item .meta .st { color:var(--gold-d); letter-spacing:1px; }
+    .item .txt { margin:8px 0 10px; white-space:pre-wrap; word-wrap:break-word; font-size:1rem; }
+    .flags { display:flex; flex-wrap:wrap; gap:6px; }
+    .flag { font-size:.75rem; font-weight:700; border-radius:99px; padding:2px 10px; background:#FFF1DD; color:#8A4B00; border:1px solid #F4D3A6; }
+    .flag.red { background:#FDE7E5; color:#9A2A22; border-color:#F3C1BC; }
+    .flag.gray { background:var(--bg2); color:var(--muted); border-color:var(--line); }
+    .meter { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:6px 16px; margin-top:12px; font-size:.78rem; color:var(--muted); }
+    .meter div { display:grid; grid-template-columns:70px 1fr; align-items:center; gap:8px; }
+    .meter i { display:block; height:6px; border-radius:6px; background:var(--bg2); position:relative; overflow:hidden; }
+    .meter i::after { content:""; position:absolute; inset:0 auto 0 0; width:var(--w); background:var(--c, var(--ok)); border-radius:6px; }
+    .acts { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .acts button { font:inherit; font-weight:600; font-size:.9rem; border-radius:10px; padding:8px 14px; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); }
+    .acts .ap { background:var(--ok); border-color:var(--ok); color:#fff; }
+    .acts .rj { color:var(--bad); }
+    .acts button:hover { transform:translateY(-1px); }
+    .replybox { display:none; margin-top:10px; }
+    .replybox.open { display:block; }
+    .replybox textarea { width:100%; min-height:70px; font:inherit; border:1px solid var(--line); border-radius:10px; padding:10px; }
+    .existing { margin-top:10px; border-left:3px solid var(--gold); background:#FFF9E8; padding:8px 12px; border-radius:0 10px 10px 0; font-size:.9rem; }
+    .empty { text-align:center; color:var(--muted); padding:50px 10px; }
+    .empty .big { font-size:2.6rem; }
+
+    /* Approve: a green stamp lands, then the card lifts away. Reject: the card goes through the shredder. */
+    .stamp { position:absolute; right:18px; top:14px; border:3px solid var(--ok); color:var(--ok); border-radius:8px; padding:2px 12px; font-weight:800; letter-spacing:.12em;
+      text-transform:uppercase; transform:rotate(-9deg) scale(2.4); opacity:0; animation:stamp .35s cubic-bezier(.3,1.6,.5,1) forwards; background:#fff; }
+    @keyframes stamp { to { transform:rotate(-9deg) scale(1); opacity:1; } }
+    .item.lift { transform:translateY(-30px) scale(.97); opacity:0; }
+    .item.shred { animation:shred .8s ease-in forwards; }
+    @keyframes shred {
+      0% { clip-path:inset(0 0 0 0); }
+      30% { transform:translateY(6px); }
+      100% { transform:translateY(80px); opacity:0;
+        -webkit-mask:repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 18px); mask:repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 18px); }
+    }
+    .toast { position:fixed; left:50%; bottom:22px; transform:translate(-50%, 120%); background:var(--navy); color:#fff; padding:10px 18px; border-radius:12px; font-size:.9rem; transition:transform .3s, visibility .3s; visibility:hidden; }
+    .toast.show { transform:translate(-50%, 0); visibility:visible; }
+    .badge { font-size:.66rem; background:var(--navy); color:#fff; padding:2px 8px; border-radius:99px; letter-spacing:.08em; vertical-align:middle; margin-left:4px; }
+    .atabs { display:flex; gap:8px; margin:18px 0 0; flex-wrap:wrap; }
+    .atabs a { padding:7px 14px; border-radius:99px; font-size:.9rem; font-weight:600; color:var(--muted); border:1px solid var(--line); background:#fff; }
+    .atabs a.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+    footer { text-align:center; color:var(--muted); font-size:.8rem; padding:0 20px 36px; }
+    @media (prefers-reduced-motion:reduce) { .item, .item.shred, .stamp { animation:none !important; transition:none; } }
+      .item .meta .pts { color:var(--gold-d); font-weight:700; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/admin-portal/" class="logo">CLOUDSHIFT <span>LABS</span> <b class="badge">ADMIN</b></a>
+    <div class="r"><a href="/phish/#leaderboard">Public board</a><a href="/portal/">Client portal</a><a href="/logout">Sign out</a></div>
+  </nav>
+
+  <main>
+    <p class="eyebrow">Admin portal</p>
+    <h1>Leaderboard review</h1>
+    <p class="lead">Nicknames from Phish or Legit? that the name filter wasn't sure about. Approve to show them on the board, or reject to hide them. Clearly rude names are blocked before they get here.</p>
+
+    <div class="atabs"><a href="/admin-portal/">Clients</a><a href="/admin-portal/comments/">Comments review</a><a href="/admin-portal/leaderboard/" class="on" aria-current="page">Leaderboard</a></div>
+
+    <div class="tabs" id="tabs">
+      <button type="button" class="on" data-s="pending">Needs review <span class="n" id="n-pending">0</span></button>
+      <button type="button" data-s="approved">On the board <span class="n" id="n-approved">0</span></button>
+      <button type="button" data-s="rejected">Rejected <span class="n" id="n-rejected">0</span></button>
+    </div>
+    <div id="list"></div>
+  </main>
+  <div class="toast" id="toast"></div>
+  <footer>Admin area · only accounts listed in the ADMIN_EMAILS setting can use it.</footer>
+
+  <script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const when = iso => new Date(iso).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    const FLAG = { words: ['🤔 Possible rude word'], impersonation: ['🎭 Looks official', 'red'], repeat: ['🔁 Repeated letters', 'gray'] };
+    let status = 'pending', items = [];
+
+    const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); };
+
+    function card(c) {
+      const flags = (c.hold || []).map(f => { const [t, cls] = FLAG[f] || [f]; return `<span class="flag ${cls || ''}">${t}</span>`; }).join('');
+      const acts = status === 'pending'
+        ? `<button class="ap" data-a="approve">✓ Approve</button><button class="rj" data-a="reject">✕ Reject</button>`
+        : status === 'approved'
+          ? `<button class="rj" data-a="reject">Hide from board</button><button class="rj" data-a="delete">Delete score</button>`
+          : `<button class="ap" data-a="approve">Restore to board</button><button class="rj" data-a="delete">Delete forever</button>`;
+      return `<div class="item" data-id="${esc(c.id)}">
+        <div class="meta"><b>${esc(c.name)}</b><span class="pts">${esc(c.points)} pts</span><span>${esc(c.correct)}/${esc(c.total)} correct in ${Math.round(c.seconds)}s</span><span>${esc(c.week)}</span><span>${when(c.at)}</span></div>
+        <div class="flags" style="margin-top:10px">${flags}</div>
+        <div class="acts">${acts}</div>
+      </div>`;
+    }
+
+    function render() {
+      $('list').innerHTML = items.length ? items.map(card).join('')
+        : `<div class="empty"><div class="big">${status === 'pending' ? '🏆' : '📭'}</div>${status === 'pending' ? 'All clear. No nicknames are waiting for review.' : 'Nothing here yet.'}</div>`;
+    }
+
+    async function load() {
+      const res = await fetch(`/api/leaderboard/admin?status=${status}`, { cache: 'no-store' });
+      const out = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 403) {
+        $('tabs').hidden = true;
+        $('list').innerHTML = `<div class="empty"><div class="big">🔒</div>${esc(out.error || 'Admins only.')}<br>Signed in with the wrong account? <a href="/logout">Sign out</a> and try again.</div>`;
+        return;
+      }
+      if (!res.ok || !out.ok) { $('list').innerHTML = `<div class="empty">${esc(out.error || 'Could not load scores.')}</div>`; return; }
+      items = out.scores || [];
+      for (const [k, v] of Object.entries(out.counts || {})) if ($('n-' + k)) $('n-' + k).textContent = v;
+      render();
+    }
+
+    const bump = (k, d) => { const n = $('n-' + k); n.textContent = Math.max(0, (+n.textContent || 0) + d); n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
+
+    async function act(el, action) {
+      const res = await fetch('/api/leaderboard/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: el.dataset.id, action }) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) { toast(out.error || 'That did not work. Try again.'); return false; }
+      return true;
+    }
+
+    async function leave(el, how, to) {
+      if (how === 'approve') {
+        const s = document.createElement('div'); s.className = 'stamp'; s.textContent = 'On the board'; el.append(s);
+        await sleep(reduce ? 0 : 650); el.classList.add('lift');
+      } else el.classList.add('shred');
+      await sleep(reduce ? 0 : 800);
+      el.remove();
+      items = items.filter(c => c.id !== el.dataset.id);
+      bump(status, -1); if (to) bump(to, 1);
+      if (!items.length) render();
+    }
+
+    $('list').addEventListener('click', async e => {
+      const b = e.target.closest('button[data-a]'); if (!b) return;
+      const el = b.closest('.item'), a = b.dataset.a;
+      if (a === 'delete' && !confirm('Delete this score for good?')) return;
+      b.disabled = true;
+      if (await act(el, a)) {
+        toast(a === 'approve' ? 'Now showing on the leaderboard' : a === 'reject' ? 'Hidden from the leaderboard' : 'Deleted');
+        await leave(el, a, a === 'approve' ? 'approved' : a === 'reject' ? 'rejected' : null);
+      }
+      b.disabled = false;
+    });
+
+    $('tabs').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      [...$('tabs').children].forEach(x => x.classList.toggle('on', x === b));
+      status = b.dataset.s; load();
+    });
+    load();
+  })();
+  </script>
+</body>
+</html>
